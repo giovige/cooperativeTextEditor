@@ -7,7 +7,18 @@ export class Vm {
     GBDisk: number;
     GBRam: number;
     status: number;
-    idCreatore: string;
-    team: Group;
-    owners: Student[];
+    
+
+    constructor(    id: number,
+        vcpu: number,
+        GBDisk: number,
+        GBRam: number,
+        status: number,
+    ) {
+        this.id=id;
+        this.status=status;
+        this.vcpu=vcpu;
+        this.GBDisk=GBDisk;
+        this.GBRam=GBRam;
+    }
 }

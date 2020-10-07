@@ -30,6 +30,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/authInterceptor';
 import { GroupsContComponent } from './teacher/groups/groups-cont.component';
 import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
     HttpClientModule,
     MatDialogModule,
     MatButtonModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCardModule
   ],
   providers: [ {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true} ],
   bootstrap: [AppComponent],
