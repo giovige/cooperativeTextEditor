@@ -79,7 +79,7 @@ masterToggle() {
 }
 
 studentColumns: string[] = ['select','id', 'serial', 'name', 'firstName' ];
-  //  columnsToDisplay: string[] = ['select','id', 'serial', 'name', 'firstName'];
+
 
 
 sendRequest() {     //@@@@@@invia richiesta  
@@ -96,9 +96,9 @@ group: Student[] = [{ id: '261098', serial:'1', name: 'ini', firstName: 'enzo', 
                     { id: '261088', serial:'2', name: 'bianchi', firstName: 'paolo', courseId: '34', groupId:'33'} 
 ];
 
+groupColumns: string[] = ['select','name', 'firstName'];
 
-
-
+groupName:string='gruppo2';
 
 
 }

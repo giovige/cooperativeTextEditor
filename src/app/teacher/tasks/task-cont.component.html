@@ -1,0 +1,32 @@
+<span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span> 
+
+
+<div class="division">
+  <mat-card class="example-card" *ngFor="let cont of tasks">
+      <mat-card-title>
+       Task: {{cont.id}}
+      </mat-card-title>
+    <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
+    Data scadenza: {{cont.dataScadenza}}
+    </mat-card-subtitle>
+    <mat-card-content>
+    </mat-card-content>
+  </mat-card>      
+</div>
+
+<br>
+<br>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<br>
+
+<div>
+<span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span> 
+
+
+</div>

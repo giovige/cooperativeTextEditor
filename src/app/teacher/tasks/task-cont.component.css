@@ -1,0 +1,20 @@
+/*card style*/
+
+.example-card {
+    max-width: 15%;
+    margin: 1%;
+  }
+  
+  .division{
+    display: block;
+  }
+  
+  mat-card{
+    float: left;
+  }
+  
+  .action{
+    margin: 3%;
+    text-align: center;
+  }
+  

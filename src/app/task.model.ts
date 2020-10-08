@@ -1,11 +1,11 @@
 export class Task {
     id: number;
-    dataRilascio: number;
-    dataScadenza: number;
+    dataRilascio: string;
+    dataScadenza: string;
 
 
 
-    constructor( id: number, dataRilascio: number, dataScadenza: number) 
+    constructor( id: number, dataRilascio: string, dataScadenza: string) 
     {
         this.id=id;
         this.dataRilascio= dataRilascio;

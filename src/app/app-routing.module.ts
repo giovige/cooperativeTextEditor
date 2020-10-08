@@ -8,6 +8,7 @@ import { PageNotFoundComponentComponent } from './teacher/page-not-found-compone
 import { LoginDialogComponent } from './auth/login-dialog.component';
 import { AuthGuard } from './auth/auth.guard';
 import { GroupsContComponent} from './teacher/groups/groups-cont.component';
+import { TaskContComponent } from './teacher/tasks/task-cont.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'teacher/courses/applicazioni-internet/students', canActivate: [AuthGuard], component: StudentsContComponent },
   { path: 'teacher/courses/applicazioni-internet/vms', canActivate: [AuthGuard], component: VmsContComponentComponent },
   { path: 'teacher/courses/applicazioni-internet/groups', canActivate: [AuthGuard], component: GroupsContComponent },
+  { path: 'teacher/courses/applicazioni-internet/tasks', canActivate: [AuthGuard], component: TaskContComponent },
   /*{ path: 'login', component: LoginDialogComponent},*/
   { path: '**', component: PageNotFoundComponentComponent }  
 ];

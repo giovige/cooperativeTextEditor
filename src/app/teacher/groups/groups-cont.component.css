@@ -70,3 +70,14 @@ table {
   color: rgb(253, 247, 247);
   margin-right: 8px;
 }
+
+
+.nomegruppo{
+  background-color: rgb(217 211 211 / 66%);
+  margin: 1%;
+}
+
+.grouptext{
+  font-size: x-large;
+}
+
