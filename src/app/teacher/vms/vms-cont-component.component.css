@@ -57,3 +57,48 @@ button{
  
   margin-right: 8px;
 }
+
+
+mat-form-field {
+  margin-right: 1%;
+  width: fit-content;
+  min-width: 50px;
+  max-width: 150px;
+}
+
+.addvmform {
+  margin-top: 8px;
+  margin-left: 12px;
+  width: 100%;
+  
+}
+
+
+
+/*card style*/
+
+.example-card {
+  max-width: 15%;
+  margin: 1%;
+}
+
+.division{
+  display: block;
+}
+
+mat-card{
+  float: left;
+}
+
+.action{
+  margin: 3%;
+  text-align: center;
+}
+
+p{
+  text-align: center;
+}
+
+.addvm{
+  margin: 5px;
+}

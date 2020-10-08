@@ -3,7 +3,8 @@ import {MatTable} from '@angular/material/table';
 import {Student} from 'src/app/student.model'
 import {SelectionModel, DataSource} from '@angular/cdk/collections';
 import { Vm } from '../../vm.model';
-
+import {MatDialogModule,MatDialog} from '@angular/material/dialog'; 
+import {AddVmDialogComponent} from './add-vm-dialog.component';
 
 @Component({
   selector: 'app-vms-cont-component',
@@ -12,7 +13,7 @@ import { Vm } from '../../vm.model';
 })
 export class VmsContComponentComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -21,13 +22,14 @@ export class VmsContComponentComponent implements OnInit {
   @ViewChild('table') table: MatTable<Element>;
 
     @Input()
-    actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null, idCreatore: '', team: null, owners: null};
+    actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null};
     
+    ownerOfVm=true;
     
     dataSource: Vm[] = [
-      { id: 1, vcpu: 13, GBDisk: 54, GBRam: 76, status: 1, idCreatore: '261088', team: null, owners: null},
-      { id: 2, vcpu: 54, GBDisk: 548, GBRam: 6, status: 0, idCreatore: '261088', team: null, owners: null},
-      { id: 3, vcpu: 545, GBDisk: 86, GBRam: 65, status: 0, idCreatore: '261088', team: null, owners: null}
+      { id: 1, vcpu: 13, GBDisk: 54, GBRam: 76, status: 1},
+      { id: 2, vcpu: 54, GBDisk: 548, GBRam: 6, status: 0},
+      { id: 3, vcpu: 545, GBDisk: 86, GBRam: 65, status: 0}
     ];
 
 
@@ -56,4 +58,15 @@ export class VmsContComponentComponent implements OnInit {
 
 
 
+
+
+    openDialog(): void {
+      const dialogRef = this.dialog.open(AddVmDialogComponent, {
+        width: '300px' 
+    });
+      /*dialogRef.afterClosed().subscribe( end => {
+        this.router.navigateByUrl('home');
+      });*/
+      
+    }
 }

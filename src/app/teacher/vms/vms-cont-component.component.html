@@ -1,88 +1,49 @@
-<div class="container">
-    <span class="mat-title"><mat-icon>chevron_right</mat-icon>&nbsp;Lista delle VMs</span>
-      
-          
-      
-           <br>
-          
-          
-      
-          <table mat-table #table [dataSource]="dataSource" matSort > 
-            
-            
-            <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef>
-                
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()"
-                              (change)="$event ? selection.toggle(row) : null"
-                              [checked]="selection.isSelected(row)">
-                  
-                </mat-checkbox>
-              </td>      
-            </ng-container>
-      
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> Id </th>
-              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-            </ng-container>
-           
-            <ng-container matColumnDef="vcpu">
-              <th mat-header-cell *matHeaderCellDef> vcpu </th>
-              <td mat-cell *matCellDef="let element"> {{element.vcpu}} </td>
-            </ng-container>
-  
-            <ng-container matColumnDef="GBDisk">
-              <th mat-header-cell *matHeaderCellDef> GBDisk </th>
-              <td mat-cell *matCellDef="let element"> {{element.GBDisk}} </td>
-            </ng-container>
-  
-            <ng-container matColumnDef="GBRam">
-              <th mat-header-cell *matHeaderCellDef> GBRam </th>
-              <td mat-cell *matCellDef="let element"> {{element.GBRam}} </td>
-            </ng-container>
-  
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef> status </th>
-              <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-            </ng-container>
-             
-            <tr mat-header-row *matHeaderRowDef="vmsColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: vmsColumns;"
-              ></tr>       
-          </table>
-      
-          <br>
-          <button class="sendRequest" mat-button (click)="sendRequest()" >Invia richiesta gruppo</button>
-        
-      
-      
-          <br>
-          <br>
-  <!-- 
-          <form class="createVm">
-            <section>
-      
-              <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Me:</mat-label>
-                  <input matInput placeholder="Ex. Mario Rossi" value={{actualUser.name}} disabled>
-              </mat-form-field>
-      
-              <mat-form-field appearance="fill">
-                  <mat-label>Nome gruppo</mat-label>
-                  <input matInput>
-              </mat-form-field>
-              
-              <mat-form-field appearance="fill">
-                  <mat-label>Timeout richiesta</mat-label>
-                  <input matInput type="number" placeholder="Ex. 24"  min="1">
-                  <span matSuffix>hours</span>
-              </mat-form-field>
-      
-            </section>
-          </form>
-           -->
-  
-      </div>
-  
+<section>
+     <button mat-raised-button (click)="openDialog()" class="addvm" color="warn"><mat-icon>add</mat-icon>&nbsp;New Vm</button> 
+</section>
+
+<div class="division">
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>VM #1</mat-card-title>
+    <mat-card-subtitle>Stato: ......</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image src="https://cdn.icon-icons.com/icons2/17/PNG/256/virtualboxvirtualboxvirtualmachine_virtualbox_cajavirtua_2235.png" alt="Photo of a VM">
+  <mat-card-content>
+    <p *ngIf="ownerOfVm">You're owner of this VM</p>
+    <ng-template>
+      <p #elseBlock>You're owner of this VM</p>
+    </ng-template>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>play_arrow</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>stop</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>delete</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>info</mat-icon></button>
+  </mat-card-actions>
+</mat-card>
+
+
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>VM #1</mat-card-title>
+    <mat-card-subtitle>Stato: ......</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image src="https://cdn.icon-icons.com/icons2/17/PNG/256/virtualboxvirtualboxvirtualmachine_virtualbox_cajavirtua_2235.png" alt="Photo of a VM">
+  <mat-card-content>
+    <p *ngIf="ownerOfVm">You're owner of this VM</p>
+    <ng-template>
+      <p #elseBlock>You're owner of this VM</p>
+    </ng-template>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>play_arrow</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>stop</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>delete</mat-icon></button>
+    <button mat-mini-fab class="action" color="primary"><mat-icon>info</mat-icon></button>
+  </mat-card-actions>
+</mat-card>
+
+</div>

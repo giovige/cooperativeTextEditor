@@ -31,6 +31,7 @@ import { AuthInterceptor } from './auth/authInterceptor';
 import { GroupsContComponent } from './teacher/groups/groups-cont.component';
 import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
+import { AddVmDialogComponent } from './teacher/vms/add-vm-dialog.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {MatCardModule} from '@angular/material/card';
     PageNotFoundComponentComponent,
     VmsContComponentComponent,
     LoginDialogComponent,
-    GroupsContComponent
+    GroupsContComponent,
+    AddVmDialogComponent
   ],
   imports: [
     BrowserModule,
