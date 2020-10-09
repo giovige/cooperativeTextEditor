@@ -1,18 +1,21 @@
-<span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span> 
-
+<!-- <section>
+    <span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span> 
+</section>
 
 <div class="division">
-  <mat-card class="example-card" *ngFor="let cont of tasks">
-      <mat-card-title>
-       Task: {{cont.id}}
-      </mat-card-title>
-    <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
-    Data scadenza: {{cont.dataScadenza}}
-    </mat-card-subtitle>
-    <mat-card-content>
-    </mat-card-content>
-  </mat-card>      
+      <mat-card class="example-card" *ngFor="let cont of tasks">
+          <mat-card-title>
+          Task: {{cont.id}}
+          </mat-card-title>
+        <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
+        Data scadenza: {{cont.dataScadenza}}
+        </mat-card-subtitle>
+        <mat-card-content>
+        </mat-card-content>
+      </mat-card>      
+
 </div>
+
 
 <br>
 <br>
@@ -26,7 +29,118 @@
 <br>
 
 <div>
-<span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span> 
+   <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span>
+</div>
+ -->
 
+ <div id="wrapper">
+  
+
+    <div id="inner1">  <span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span>
+
+      <div class="division">
+        <mat-card class="example-card" *ngFor="let cont of tasks">
+            <mat-card-title>
+            Task: {{cont.id}}
+            </mat-card-title>
+          <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
+          Data scadenza: {{cont.dataScadenza}}
+          </mat-card-subtitle>
+          <mat-card-content>
+          </mat-card-content>
+        </mat-card>      
+      </div> 
+
+    </div>
+
+
+
+    <div id="inner2">
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    </div>
+
+
+
+
+
+
+    <div id="inner2">
+      <section>
+          <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span>
+      </section>
+
+      <!-- <mat-selection-list #shoes>
+        <mat-list-option *ngFor="let shoe of typesOfShoes">
+          {{shoe}}
+        </mat-list-option>
+      </mat-selection-list> -->
+
+      <form class="addEssayForm">
+        <section>
+        <mat-form-field class="essayform-width">
+  
+          <mat-label>Aggiungi elaborato</mat-label>  
+          <input #addField type="text" matInput placeholder="Ex. elaborato_1 ..."  [formControl]="essayControl" >
+        
+        
+        </mat-form-field>
+        <button class="addButton" mat-button (click)="addEssay(); addField.value=''" >Aggiungi</button>
+      </section>
+      </form>
+       
+      
+      <table mat-table #table [dataSource]="essays" matSort > 
+
+  
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef > Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+  
+        <!-- vote Column -->
+        <ng-container matColumnDef="voto">
+          <th mat-header-cell *matHeaderCellDef > Voto </th>
+          <td mat-cell *matCellDef="let element"> {{element.voto}} </td>
+        </ng-container>
+  
+  
+        <!-- status Column -->
+        <ng-container matColumnDef="stato">
+          <th mat-header-cell *matHeaderCellDef > Stato </th>
+          <td mat-cell *matCellDef="let element"> {{element.stato}} </td>
+        </ng-container>
+  
+        
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+  
+      </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
 
 </div>
