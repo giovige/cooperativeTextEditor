@@ -16,23 +16,23 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSortModule} from '@angular/material/sort'; 
 import {MatPaginatorModule} from '@angular/material/paginator'; 
 import { DataSource } from '@angular/cdk/collections';
-import { StudentsComponent } from './teacher/students.component';
-import { StudentsContComponent } from './teacher/students-cont.component';
+import { StudentsComponent } from './student/students.component';
+import { StudentsContComponent } from './student/students-cont.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponentComponent } from './teacher/home-component.component';
 import { PageNotFoundComponentComponent } from './teacher/page-not-found-component.component';
-import { VmsContComponentComponent } from './teacher/vms/vms-cont-component.component';
+import { VmsContComponentComponent } from './student/vms/vms-cont-component.component';
 import { HttpClientModule }    from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import { LoginDialogComponent } from './auth/login-dialog.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/authInterceptor';
-import { GroupsContComponent } from './teacher/groups/groups-cont.component';
+import { GroupsContComponent } from './student/groups/groups-cont.component';
 import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
-import { AddVmDialogComponent } from './teacher/vms/add-vm-dialog.component';
-import { TaskContComponent } from './teacher/tasks/task-cont.component';
+import { AddVmDialogComponent } from './student/vms/add-vm-dialog.component';
+import { TaskContComponent } from './student/tasks/task-cont.component';
 
 
 @NgModule({
