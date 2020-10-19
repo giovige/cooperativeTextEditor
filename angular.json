@@ -64,7 +64,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "ai20-lab04:build",
-            "proxyConfig": "C:/Users/Giovanni/angular_projects/ai20-lab05/src/proxy.conf.json",
+            "proxyConfig": "C:/Users/Giovanni/angular_projects/proj_nomodules/proxy.conf.json",
             "sslKey": "server.key",
             "sslCert": "server.crt"
           },

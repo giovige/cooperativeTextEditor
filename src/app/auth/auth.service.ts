@@ -10,7 +10,7 @@ import * as moment from 'moment';
   providedIn: 'root'
 })
 export class AuthService {
-  private API_PATH = 'http://localhost:3000';
+  private API_PATH ='http://localhost:8080';
   user: User;
   loggedin : boolean;
 
@@ -26,18 +26,18 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     // console.log(email);
     // console.log(password);
-    return this.http.post<User>(`${this.API_PATH}/login`, { email, password } )
+    return this.http.post<User>(`${this.API_PATH}/auth/signin`, {username: email,password: password} )
           .pipe(tap(res => this.setSession(res))
           );    
   }
 
-  private setSession(token) {
+  private setSession(res) {
     this.loggedin = true;
-    
-    const tkn = JSON.parse(atob(token.accessToken.split('.')[1]));
-    console.log(atob(token.accessToken.split('.')[1]));
+    console.log(res);
+    const token=res.token;
+    //console.log(token);
     localStorage.setItem('accessToken', token.accessToken);
-    localStorage.setItem('expires_at', tkn.exp);
+    // localStorage.setItem('expires_at', tkn.exp);
     console.log(this.isloggedIn());
     console.log(this.isloggedOut());
   }

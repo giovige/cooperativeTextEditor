@@ -8,9 +8,11 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
+    console.log('prima');
+    console.log(localStorage.getItem('accessToken'));
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
+      console.log('dopo');
       console.log(accessToken);
       const cloned = request.clone({
         headers: request.headers.set('Authorization', 'Bearer ' + accessToken)
@@ -24,3 +26,4 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 }
 
+//TODO: cambiare modo di gestire l'accessToken da localStorage
