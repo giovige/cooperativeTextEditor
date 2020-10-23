@@ -14,10 +14,10 @@ import { TaskContComponent } from './student/tasks/task-cont.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponentComponent },
   { path: 'courses',  redirectTo: 'teacher/courses'},
-  { path: 'teacher/courses/applicazioni-internet/students', canActivate: [AuthGuard], component: StudentsContComponent },
-  { path: 'teacher/courses/applicazioni-internet/vms', canActivate: [AuthGuard], component: VmsContComponentComponent },
-  { path: 'teacher/courses/applicazioni-internet/groups', canActivate: [AuthGuard], component: GroupsContComponent },
-  { path: 'teacher/courses/applicazioni-internet/tasks', canActivate: [AuthGuard], component: TaskContComponent },
+  { path: 'teacher/courses/:course_name/students', canActivate: [AuthGuard], component: StudentsContComponent },
+  { path: 'teacher/courses/:course_name/vms', canActivate: [AuthGuard], component: VmsContComponentComponent },
+  { path: 'teacher/courses/:course_name/groups', canActivate: [AuthGuard], component: GroupsContComponent },
+  { path: 'teacher/courses/:course_name/tasks', canActivate: [AuthGuard], component: TaskContComponent },
   /*{ path: 'login', component: LoginDialogComponent},*/
   { path: '**', component: PageNotFoundComponentComponent }  
 ];

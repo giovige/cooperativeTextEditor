@@ -5,6 +5,7 @@ import { StudentsComponent } from './students.component';
 import { toArray, mergeMap } from 'rxjs/operators';
 import {StudentService} from 'src/app/service/student.service'
 import { forkJoin } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -16,16 +17,23 @@ import { forkJoin } from 'rxjs';
 export class StudentsContComponent implements OnInit {
   enrolled: Student[];
   students: Student[];
+  course_id: string;
+  course_name: string;
 
-  constructor(private studentService: StudentService ) {
+  constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute ) {
       this.enrolled = [];
       this.students = [];
   }
 
   
   ngOnInit(): void {
-    this.getEnrolled();
-    this.getAll();
+    this.activatedRoute.params.subscribe(p => {
+      this.course_id = p['id'];
+      this.course_name = p['course_name'];
+      
+      this.getEnrolledStudents();
+      this.getAll();
+    });
     
   }
   
@@ -33,8 +41,8 @@ export class StudentsContComponent implements OnInit {
 
   //implementazione service
 
-  getEnrolled(): void {
-    this.studentService.query()
+  getEnrolledStudents(): void {
+    this.studentService.getEnrolled(this.course_name)
         .subscribe(s => this.enrolled = s);
   }
 
@@ -45,9 +53,9 @@ export class StudentsContComponent implements OnInit {
   
 
   onAdded(stud: Student): void {
-    this.studentService.updateAdd(stud, "1")
+    this.studentService.updateAdd(stud, this.course_name)
         .subscribe( _ => 
-          { this.getEnrolled(); 
+          { this.getEnrolledStudents(); 
           }
           
         );
@@ -55,15 +63,16 @@ export class StudentsContComponent implements OnInit {
 
   onRemoved(studs: Student[]): void {
     console.log(studs);
-    this.studentService.updateDelete(studs)
+    this.studentService.updateDelete(studs, this.course_name)
         .subscribe( _ => 
-          { this.getEnrolled();
+          { this.getEnrolledStudents();
           }
           
         );
     
   }
 
+  /*
   onAdded1(stud: Student) {
     //console.log("emitter add called");    
     //console.log(this.enrolled.some(s => s.id === stud.id && s.name === stud.name && s.firstName === stud.firstName));
@@ -83,7 +92,7 @@ export class StudentsContComponent implements OnInit {
       this.enrolled.splice(index,1)
     });
   }
-
+*/
 
   
 }

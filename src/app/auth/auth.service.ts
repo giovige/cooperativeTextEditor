@@ -12,7 +12,9 @@ import * as moment from 'moment';
 export class AuthService {
   private API_PATH ='http://localhost:8080';
   user: User;
+  role: string;
   loggedin : boolean;
+  id: string;
 
   constructor(private http: HttpClient) { 
      this.loggedin = false;
@@ -24,8 +26,6 @@ export class AuthService {
   };
   
   login(email: string, password: string): Observable<User> {
-    // console.log(email);
-    // console.log(password);
     return this.http.post<User>(`${this.API_PATH}/auth/signin`, {username: email,password: password} )
           .pipe(tap(res => this.setSession(res))
           );    
@@ -33,13 +33,17 @@ export class AuthService {
 
   private setSession(res) {
     this.loggedin = true;
-    console.log(res);
     const token=res.token;
-    //console.log(token);
-    localStorage.setItem('accessToken', token.accessToken);
+    const role=res.role[0];
+    const name=res.name;
+    this.id = res.username;
+    this.role = res.role[0];
+
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('role', res.role[0]);
+    localStorage.setItem('name', res.username);
     // localStorage.setItem('expires_at', tkn.exp);
-    console.log(this.isloggedIn());
-    console.log(this.isloggedOut());
+    
   }
 
 
@@ -48,7 +52,9 @@ export class AuthService {
     this.loggedin = false;
     localStorage.removeItem('accessToken');
     localStorage.removeItem('expires_at');
-    console.log('AuthService.logout: accessToken removed');
+    localStorage.removeItem('role');
+    localStorage.removeItem('name');
+    // console.log('AuthService.logout: accessToken removed');
   }
   
   public isloggedIn() {
@@ -62,4 +68,30 @@ export class AuthService {
 
   public isloggedOut() { return !this.isloggedIn(); }
 
+
+  public isProfessor() {
+    let r = localStorage.getItem('role');
+    if (r == 'ROLE_PROFESSOR')
+      return true;
+    return false;
+  }
+
+  public isStudent() {
+    let r = localStorage.getItem('role');
+    if (r == 'ROLE_STUDENT')
+      return true;
+    return false;
+  }
+
+  public resetRole(){
+    localStorage.setItem('role',null);
+  }
+
+  public getStudentId() {
+    return this.id;
+  }
+
+  public getStudentRole() {
+    return this.role;
+  }
 }

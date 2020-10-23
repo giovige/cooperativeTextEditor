@@ -3,6 +3,7 @@ import { Student } from '../student.model';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { concatAll, mergeMap } from 'rxjs/operators';
+import { AppComponent } from '../app.component';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class StudentService {
 npx json-server-auth virtuallabs.json -r virtuallabs_routes.json
 */
   
-  private API_PATH = 'http://localhost:3000/';
+  private API_PATH ='API/';
 
   constructor(private http: HttpClient) { }
   httpOptions = {
@@ -32,31 +33,45 @@ npx json-server-auth virtuallabs.json -r virtuallabs_routes.json
   }
 
 
-  query(): Observable<Student[]> {      //studenti iscritti al corso
-    return this.http.get<Student[]>(this.API_PATH + 'courses/1/students');
+
+  getEnrolled(course_name: string): Observable<Student[]> {      //studenti iscritti al corso
+    return this.http.get<Student[]>(this.API_PATH + 'courses/'+course_name+'/enrolled');
     //return of(this.enrolled);
   }
-  
+
+  getStudentCourses(stud_id: string): Observable<any> {     
+    return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id +'/courses');
+
+  }
+
+
+  getCourses(): Observable<any> {     
+    return this.http.get<string[]>(this.API_PATH + 'courses/');
+
+  }
+
+
+  deleteCourse(name: string): Observable<any> {   
+    alert("omg");  
+    return this.http.delete<string[]>(this.API_PATH + 'courses/'+name);
+  }
 
 
 
-
-  updateDelete(studList: Student[]): Observable<Student> {
-    studList.forEach(s => s.courseId='0');
-
+  updateDelete(studList: Student[], course:string): Observable<Student> {
     return <Observable<Student>> forkJoin(
       studList.map(s => {
-        return <Observable<Student>> this.http.put(`${this.API_PATH}students/${s.id}`, s, this.httpOptions);
+        return <Observable<Student>> this.http.put(`${this.API_PATH}courses/${course}/unsubscribeOne/${s.id}`, s, this.httpOptions);
       })
     ).pipe(concatAll());
   }
 
-  updateAdd(stud: Student, Cid: string): Observable<any> {
-    stud.courseId=Cid;
-    return this.http.put(`${this.API_PATH}students/${stud.id}`, stud, this.httpOptions);
-  }
+  
+  updateAdd(stud: Student, course: string): Observable<any> {
+    console.log('corso'+course);
+    return this.http.post(`${this.API_PATH}courses/${course}/enrollOne`, stud, this.httpOptions);
+    }
 
 
-
-
+    
 }

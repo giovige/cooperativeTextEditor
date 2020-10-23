@@ -16,6 +16,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { LoginDialogComponent } from './auth/login-dialog.component';
 import { AuthService } from './auth/auth.service';
+import {StudentService} from 'src/app/service/student.service'
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -28,13 +29,23 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 
 export class AppComponent implements OnInit, OnDestroy{
-  
+  public course_list = true;
+  courses = [];
+  prof_tabs=['students','groups','vms','tasks'];
+  stud_tabs=['groups','vms','tasks'];
+  id: string;
+  role: string;   //ruolo user = {STUDENT, PROFESSOR}
+  course_name: string;
   title = 'ai20-lab05';
   routeQueryParams$: Subscription;
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
-constructor(public dialog: MatDialog, public authService: AuthService, private router: Router, private route: ActivatedRoute) {
+constructor(public dialog: MatDialog, public authService: AuthService, private router: Router, private route: ActivatedRoute, private studentService: StudentService) {
+  this.courses= [];
+  this.id = null;
+  this.role = null;
+  this.course_name = null;
   this.routeQueryParams$ = route.queryParams.subscribe(params => {
     if (params['doLogin']) {
       this.openDialog();
@@ -43,8 +54,12 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
 }
 
   ngOnInit() {
-    this.authService.logout();
+    this.authService.resetRole();
+
   }
+
+  
+
 
   toggleForMenuClick() {
     this.sidenav.toggle();
@@ -57,17 +72,65 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
   });
     dialogRef.afterClosed().subscribe( end => {
       this.router.navigateByUrl('home');
+      this.setRole();
+      if(this.role=='ROLE_PROFESSOR')
+        this.getCourses();
+      else
+        this.getCoursesForStudent();
+
+      setTimeout(() => {      //apro sidenav una volta che i corsi sono disponibili
+          this.toggleForMenuClick();
+          }, 200);
     });
-    
   }
+
+
 
 
   logout(){
     this.authService.logout();
     this.router.navigateByUrl('/home');
+    this.sidenav.close();
+    this.courses= [];
+    this.id = null;
+    this.role = null;
+    this.course_name = null;
   }
 
   ngOnDestroy() {
     this.routeQueryParams$.unsubscribe();
   }
+
+
+  clicked_course(course_name:string) {
+    if(course_name=='home') 
+      this.course_name="Home";
+    else
+      this.course_name=course_name;
+  }
+
+  getID(){
+    this.id = this.authService.getStudentId();
+    console.log(this.id);
+  }
+
+  getCoursesForStudent(): void {
+      this.getID();
+      this.studentService.getStudentCourses(this.id)
+          .subscribe(s => {this.courses = s;/*console.log(this.courses);*/});
+  }
+
+
+  getCourses(): void {
+    this.studentService.getCourses()
+        .subscribe(s => {this.courses = s;/*console.log(this.courses);*/});
+  }
+
+  setRole(): void {
+    this.role = this.authService.getStudentRole();
+    console.log(this.role);
+  }
+
+
+
 }

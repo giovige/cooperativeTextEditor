@@ -51,7 +51,7 @@ export class LoginDialogComponent implements OnInit {
     
     if(!this.form.invalid) {
       this.authservice.login(val.email, val.password)
-          .subscribe( 
+          .subscribe(
             data => this.dialogRef.close(),
             error => this.myError='Login error!'
           );
