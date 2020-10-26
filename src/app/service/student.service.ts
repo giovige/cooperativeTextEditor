@@ -10,9 +10,6 @@ import { AppComponent } from '../app.component';
   providedIn: 'root'
 })
 export class StudentService {
-  /*
-npx json-server-auth virtuallabs.json -r virtuallabs_routes.json
-*/
   
   private API_PATH ='API/';
 

@@ -31,8 +31,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit, OnDestroy{
   public course_list = true;
   courses = [];
-  prof_tabs=['students','groups','vms','tasks'];
-  stud_tabs=['groups','vms','tasks'];
+  tab_type = 0;  // professore o non loggato => 0   ; studente => 1
+  
   id: string;
   role: string;   //ruolo user = {STUDENT, PROFESSOR}
   course_name: string;
@@ -55,7 +55,8 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
 
   ngOnInit() {
     this.authService.resetRole();
-
+    this.tab_type=0;
+    this.router.navigateByUrl('home');
   }
 
   
@@ -73,15 +74,21 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
     dialogRef.afterClosed().subscribe( end => {
       this.router.navigateByUrl('home');
       this.setRole();
-      if(this.role=='ROLE_PROFESSOR')
+      if(this.role=='ROLE_PROFESSOR'){
+        this.tab_type=0;
         this.getCourses();
-      else
+      }
+      else{
+        this.tab_type=1;
         this.getCoursesForStudent();
+      }
 
       setTimeout(() => {      //apro sidenav una volta che i corsi sono disponibili
           this.toggleForMenuClick();
           }, 200);
     });
+
+    
   }
 
 
@@ -95,6 +102,8 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
     this.id = null;
     this.role = null;
     this.course_name = null;
+    this.tab_type=0;
+
   }
 
   ngOnDestroy() {
