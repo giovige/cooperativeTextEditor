@@ -49,6 +49,7 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
   this.routeQueryParams$ = route.queryParams.subscribe(params => {
     if (params['doLogin']) {
       this.openDialog();
+      this.sidenav.close();
     }
   });
 }
@@ -78,7 +79,7 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
         this.tab_type=0;
         this.getCourses();
       }
-      else{
+      else if(this.role=='ROLE_STUDENT'){
         this.tab_type=1;
         this.getCoursesForStudent();
       }
@@ -103,7 +104,7 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
     this.role = null;
     this.course_name = null;
     this.tab_type=0;
-
+    
   }
 
   ngOnDestroy() {
@@ -113,7 +114,7 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
 
   clicked_course(course_name:string) {
     if(course_name=='home') 
-      this.course_name="Home";
+      this.course_name="home";
     else
       this.course_name=course_name;
   }

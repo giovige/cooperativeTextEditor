@@ -67,8 +67,14 @@ export class StudentService {
   updateAdd(stud: Student, course: string): Observable<any> {
     console.log('corso'+course);
     return this.http.post(`${this.API_PATH}courses/${course}/enrollOne`, stud, this.httpOptions);
-    }
+  }
 
+
+
+
+
+
+  
 
     
 }
