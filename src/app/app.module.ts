@@ -19,8 +19,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { StudentsComponent } from './student/students.component';
 import { StudentsContComponent } from './student/students-cont.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeComponentComponent } from './teacher/home-component.component';
-import { PageNotFoundComponentComponent } from './teacher/page-not-found-component.component';
+import { PageNotFoundComponentComponent } from './page-not-found-component.component';
 import { VmsContComponentComponent } from './student/vms/vms-cont-component.component';
 import { HttpClientModule }    from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
@@ -33,6 +32,7 @@ import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
 import { AddVmDialogComponent } from './student/vms/add-vm-dialog.component';
 import { TaskContComponent } from './student/tasks/task-cont.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -40,13 +40,13 @@ import { TaskContComponent } from './student/tasks/task-cont.component';
     AppComponent,
     StudentsComponent,
     StudentsContComponent,
-    HomeComponentComponent,
     PageNotFoundComponentComponent,
     VmsContComponentComponent,
     LoginDialogComponent,
     GroupsContComponent,
     AddVmDialogComponent,
-    TaskContComponent
+    TaskContComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
