@@ -6,19 +6,24 @@ export class Vm {
     vcpu: number;
     GBDisk: number;
     GBRam: number;
-    status: number;
+    status: string;
+    idCreatore: string;
     
 
     constructor(    id: number,
         vcpu: number,
         GBDisk: number,
         GBRam: number,
-        status: number,
+        status: string,
+        idCreatore: string
     ) {
         this.id=id;
         this.status=status;
         this.vcpu=vcpu;
         this.GBDisk=GBDisk;
         this.GBRam=GBRam;
+        this.idCreatore=idCreatore;
     }
 }
+
+

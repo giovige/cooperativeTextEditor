@@ -135,8 +135,8 @@
             Studente
           </a>
 
-          <a *ngIf="course_name" [routerLink]="['student/courses/', course_name ,'groups']"
-          mat-tab-link label="Gruppi"> 
+          <a *ngIf="course_name"  [routerLink]="['student/courses/', course_name ,'groups']"
+          mat-tab-link label="Gruppi">    <!--(click)="groupClicked(course_name,)"  -->
             Gruppi
           </a>
 

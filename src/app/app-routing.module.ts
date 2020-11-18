@@ -18,6 +18,9 @@ const routes: Routes = [
   { path: 'teacher/courses/:course_name/vms', canActivate: [AuthGuard], component: VmsContComponentComponent },
   { path: 'teacher/courses/:course_name/groups', canActivate: [AuthGuard], component: GroupsContComponent },
   { path: 'teacher/courses/:course_name/tasks', canActivate: [AuthGuard], component: TaskContComponent },
+  { path: 'student/courses/:course_name/vms', canActivate: [AuthGuard], component: VmsContComponentComponent },
+  { path: 'student/courses/:course_name/groups', canActivate: [AuthGuard], component: GroupsContComponent },
+  { path: 'student/courses/:course_name/tasks', canActivate: [AuthGuard], component: TaskContComponent },
   /*{ path: 'login', component: LoginDialogComponent},*/
   { path: '**', component: PageNotFoundComponentComponent }  
 ];

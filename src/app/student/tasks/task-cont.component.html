@@ -37,14 +37,20 @@
   
 
     <div id="inner1">  <span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span>
-
+    <h4>(Clicca su una consegna per visualizzare i tuoi elaborati)</h4> 
       <div class="division">
-        <mat-card class="example-card" *ngFor="let cont of tasks">
+        <mat-card (click)="clickedTask(cont.id)" class="example-card" *ngFor="let cont of tasks">
             <mat-card-title>
             Task: {{cont.id}}
             </mat-card-title>
-          <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
-          Data scadenza: {{cont.dataScadenza}}
+            <mat-divider></mat-divider>
+            <br>
+          <mat-card-subtitle>
+            Corso: {{coursename}}
+            <br>
+            <span>&#10230;</span> Data rilascio: {{cont.dataRilascio}}
+            <br>
+            <span>&#10230;</span> Data scadenza: {{cont.dataScadenza}}
           </mat-card-subtitle>
           <mat-card-content>
           </mat-card-content>
@@ -69,16 +75,12 @@
 
 
 
-    <div id="inner2">
+    <div id="inner2" *ngIf="taskId!==0">
       <section>
-          <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span>
+          <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati per task #{{taskId}} </span>
       </section>
 
-      <!-- <mat-selection-list #shoes>
-        <mat-list-option *ngFor="let shoe of typesOfShoes">
-          {{shoe}}
-        </mat-list-option>
-      </mat-selection-list> -->
+      
 
       <form class="addEssayForm">
         <section>
@@ -87,10 +89,15 @@
           <mat-label>Aggiungi elaborato</mat-label>  
           <input #addField type="text" matInput placeholder="Ex. elaborato_1 ..."  [formControl]="essayControl" >
         
-        
         </mat-form-field>
-        <button class="addButton" mat-button (click)="addEssay(); addField.value=''" >Aggiungi</button>
-      </section>
+        
+        <button class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" >Aggiungi</button>
+          <!-- <button *ngIf="taskId===0; elseButton" class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" disabled>Aggiungi</button>
+          <ng-template #elseButton>
+          <button class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" >Aggiungi</button>
+          </ng-template>  -->
+      
+        </section>
       </form>
        
       
@@ -116,7 +123,14 @@
           <td mat-cell *matCellDef="let element"> {{element.stato}} </td>
         </ng-container>
   
-        
+        <!-- status Column -->
+        <ng-container matColumnDef="lastModified">
+          <th mat-header-cell *matHeaderCellDef > Ultima modifica </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastModified}} </td>
+        </ng-container>
+
+
+
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
         <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
   

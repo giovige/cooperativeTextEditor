@@ -31,13 +31,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit, OnDestroy{
   public course_list = true;
   courses = [];
-  tab_type = 0;  // professore o non loggato => 0   ; studente => 1
+  public tab_type = 0;  // professore o non loggato => 0   ; studente => 1
   
   id: string;
   role: string;   //ruolo user = {STUDENT, PROFESSOR}
   course_name: string;
   title = 'ai20-lab05';
   routeQueryParams$: Subscription;
+
+  teamPresent: boolean;
+  teamId:string;
+
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
@@ -142,5 +146,22 @@ constructor(public dialog: MatDialog, public authService: AuthService, private r
   }
 
 
+  //TODO
+  groupClicked(course: string): void{
+    //alert('AAAAAAAAAAAAAAAAAAHHHHH');
+    this.studentService.getStudentTeamByCourse(this.id, course)
+    .subscribe( g => {
+      console.log('>>>>>>>>teamExist');
+      if(g!==null) this.teamId = g.id;
+      console.log(this.teamId);
+      if(this.teamId!==undefined){
+        this.teamPresent=true;
+      }else
+        this.teamPresent=false;
+      console.log(this.teamPresent);
+      this.router.navigateByUrl('student/courses/'+ course +'/groups');
+    });
+
+  }
 
 }

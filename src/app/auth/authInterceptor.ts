@@ -13,10 +13,10 @@ export class AuthInterceptor implements HttpInterceptor {
       const cloned = request.clone({
         headers: request.headers.set('Authorization', 'Bearer ' + accessToken)
       });
-      console.log('AuthInterceptor accessToken found: ' + JSON.stringify(accessToken));
+      //console.log('AuthInterceptor accessToken found: ' + JSON.stringify(accessToken));
       return next.handle(cloned);
     } else {
-      console.log('AuthInterceptor accessToken not found');
+      //console.log('AuthInterceptor accessToken not found');
       return next.handle(request);
     }
   }

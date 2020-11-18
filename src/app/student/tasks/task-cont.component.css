@@ -13,6 +13,17 @@
     float: left;
   }
 
+  
+  mat-card:hover{
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    cursor: pointer;
+    background-color: #e4e4e4;
+  }
+
+
+
   #inner1 {
     float:left;
     display: contents;

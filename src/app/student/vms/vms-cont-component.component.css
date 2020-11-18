@@ -78,8 +78,8 @@ mat-form-field {
 /*card style*/
 
 .example-card {
-  max-width: 15%;
-  margin: 1%;
+  width: 14%;
+  margin: 0.5%;
 }
 
 .division{
@@ -89,6 +89,12 @@ mat-form-field {
 mat-card{
   float: left;
 }
+
+mat-card-image{
+  object-fit: cover; /*this makes the image in src fit to the size specified below*/
+  
+}
+
 
 .action{
   margin: 3%;
@@ -101,4 +107,10 @@ p{
 
 .addvm{
   margin: 5px;
+}
+
+.stats{
+  width: 1%;
+  height: 1%;
+  display: contents;
 }
