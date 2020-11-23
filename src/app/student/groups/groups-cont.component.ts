@@ -4,7 +4,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel, DataSource} from '@angular/cdk/collections';
 import {FormControl, Form} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import {catchError, map, startWith} from 'rxjs/operators';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete'; 
 import {MatTable} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -12,6 +12,12 @@ import {MatPaginator} from '@angular/material/paginator';
 import { group } from '@angular/animations';
 import {MatExpansionModule,MatAccordion} from '@angular/material/expansion'; 
 import {MatButtonModule} from '@angular/material/button'; 
+import {StudentService} from 'src/app/service/student.service';
+import { ActivatedRoute } from '@angular/router';
+import { Group } from 'src/app/group.model';
+import { AuthService } from 'src/app/auth/auth.service';
+
+
 
 @Component({
   selector: 'app-groups-cont',
@@ -20,7 +26,15 @@ import {MatButtonModule} from '@angular/material/button';
 })
 export class GroupsContComponent implements OnInit {
   
-  alreadyInGroup = true;    //@@@@@@@@@@@ selezionatore della vista opportuna
+  GroupPresent: boolean;    //@@@@@@@@@@@ selezionatore della vista opportuna
+  //course_id: string;
+  course_name: string;
+  inAteamObs: Observable<any>;
+  studentID: string;
+  group: Student[];
+  groupName:string='gruppo2';
+  currentTeam: Group;
+  team_id: string;
 
   @ViewChild('table') table: MatTable<Element>;
 
@@ -28,24 +42,37 @@ export class GroupsContComponent implements OnInit {
   actualUser: Student = { id: '', serial:'', name: '', firstName: '', courseId: '', groupId:''};
 
   
-
-  dataSource: Student[] = [
-    { id: '261098', serial:'1', name: 'ini', firstName: 'enzo', courseId: '', groupId:''},
-    { id: '261088', serial:'2', name: 'bianchi', firstName: 'paolo', courseId: '', groupId:''},
-    { id: '261078', serial:'3', name: 'verdi', firstName: 'biagio', courseId: '', groupId:''},
-    // { id: '261068', serial:'4', name: 'russo', firstName: 'giovanni', courseId: '', groupId:''},
-    // { id: '261058', serial:'1', name: 'ferrari', firstName: 'giorgio', courseId: '', groupId:''},
-    // { id: '261048', serial:'2', name: 'esposito', firstName: 'mattia', courseId: '', groupId:''},
-    // { id: '261038', serial:'4', name: 'freco', firstName: 'corrado', courseId: '', groupId:''},
-    // { id: '261032', serial:'4', name: 'marino', firstName: 'Paolo', courseId: '', groupId:''}
-  ];
-
-
-  constructor() { }
+  constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
+    this.currentTeam = null;
+   }
 
 
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe( p => {
+      //this.course_id = p['id'];
+      this.course_name = p['course_name'];
+      this.studentID = this.authService.getStudentId();
+      
+      //this.getTeam(this.studentID,this.course_name);
+      console.log(this.team_id);
+      
+      this.inAteamObs = this.studentService.studentHasTeam(this.studentID, this.course_name);
+      
+      
+      
+      //TODO
+      /* if(this.team_id!==null){
+        console.log('NON.NULL');
+        console.log(this.currentTeam);
+        console.log(this.team_id);
+        this.alreadyInGroup = true;
+        this.getMembers(this.team_id);
+      } */
+      
+    });
+    
+
   }
 
 
@@ -58,11 +85,8 @@ export class GroupsContComponent implements OnInit {
 
 selection = new SelectionModel<Student>(true, []);
 
-freeStudents: Student[] = [
-  { id: '261098', serial:'1', name: 'ini', firstName: 'enzo', courseId: '432', groupId:'32'},
-  { id: '261088', serial:'2', name: 'bianchi', firstName: 'paolo', courseId: '34', groupId:'33'},
-  { id: '261078', serial:'3', name: 'verdi', firstName: 'biagio', courseId: '32', groupId:'32'}
-];
+freeStudents: Student[] = [];
+
 
 /** Whether the number of selected elements matches the total number of rows. */
 isAllSelected() {
@@ -92,13 +116,82 @@ sendRequest() {     //@@@@@@invia richiesta
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  
-group: Student[] = [{ id: '261098', serial:'1', name: 'ini', firstName: 'enzo', courseId: '432', groupId:'32'}, 
+/* group: Student[] = [{ id: '261098', serial:'1', name: 'ini', firstName: 'enzo', courseId: '432', groupId:'32'}, 
                     { id: '261088', serial:'2', name: 'bianchi', firstName: 'paolo', courseId: '34', groupId:'33'} 
-];
+]; */
+
+
 
 groupColumns: string[] = ['select','name', 'firstName'];
+/* group: Student[];
+groupName:string='gruppo2'; */
 
-groupName:string='gruppo2';
+
+
+
+
+//@@@@@@@@@@@@@@@@@@@__________FUNZIONI per service___________@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+/* 
+//TODO
+getTeam(id: string, c: string): void{
+  this.studentService.getStudentTeamByCourse(id, c)
+  .subscribe( g => {
+    console.log('getTeam()');
+    this.currentTeam = g;
+    this.team_id = g.id;
+    console.log(this.team_id);
+
+    if(this.team_id!==null){
+      this.alreadyInGroup=true;
+      console.log(this.currentTeam);
+      console.log(this.team_id);
+      this.alreadyInGroup = true;
+      this.getMembers(this.team_id);
+    }else{
+      this.alreadyInGroup=false;
+    }
+
+    
+  });
+} */
+
+//TODO
+getMembers(teamId:string): void {
+  this.studentService.getTeamMembers(teamId)
+  .subscribe( s => {
+    console.log('getMermers()');
+    console.log(s);
+    this.group = s} );
+}
+
+
+/* 
+//TODO
+teamExist(id: string, c: string): void{
+  this.studentService.getStudentTeamByCourse(id, c)
+  .subscribe( g => {
+    console.log('>>>>>>>>teamExist');
+    this.team_id = g.id;
+    console.log(this.team_id);
+    if(this.team_id!==undefined){
+      this.alreadyInGroup=true;
+    }
+    console.log(this.alreadyInGroup);
+  });
+}
+
+ */
+
+alreadyInGroup(c: string) {
+  //console.log('pacchiufaiii    '+ c);
+  return this.studentService.studentHasTeam(this.studentID, c).subscribe(
+    b => {
+      console.log(b);
+      return b;  
+    }
+  );
+}
 
 
 }

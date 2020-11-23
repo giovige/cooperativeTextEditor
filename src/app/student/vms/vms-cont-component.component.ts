@@ -49,7 +49,7 @@ export class VmsContComponentComponent implements OnInit {
   
 
     @Input()
-    actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null,idCreatore: null};
+    actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null,idCreatore: null, screenVm: null};
     
     
     
@@ -103,8 +103,12 @@ export class VmsContComponentComponent implements OnInit {
 
 
     modifyVM(vmId: number): void {
-      console.log('modifyVM  '+ vmId);
+      alert('modifichiamoo');
     }
     
+
+    connect(vmId: number): void {
+      alert('connessionee');
+    }
 
 }

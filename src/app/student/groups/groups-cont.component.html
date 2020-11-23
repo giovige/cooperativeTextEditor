@@ -1,5 +1,5 @@
-<!-- <div class="container" *ngIf="alreadyInGroup; else elseBlock"> -->
-  <div class="container" *ngIf="alreadyInGroup; else elseBlock">
+<!-- <div class="container" *ngIf="alreadyInGroup; else elseBlock">                      *ngIf="alreadyInGroup(course_name); else elseBlock"-->
+  <div class="container" *ngIf="inAteamObs | async; else elseBlock">
     <span class="mat-title"><mat-icon>chevron_right</mat-icon>Componi il tuo gruppo</span>
     
         <form class="addgroupform">

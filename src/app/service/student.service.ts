@@ -75,9 +75,9 @@ export class StudentService {
 
   //------------------------------------->NUOVE API STUDENTE<----------------------------------------------------------------------
 
-  studentHasTeam(stud_id: string, course: string): Observable<any> {
+  studentHasTeam(stud_id: string, course: string): Observable<boolean> {
     //console.log('quiuiufijckvb   '+ stud_id + '  ' + course);
-    return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/hasTeam');
+    return this.http.get<boolean>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/hasTeam');
   }
 
 
@@ -158,9 +158,9 @@ export class StudentService {
     return this.http.get<any>(path);
   }
 
-  getEssaysByTask(course: string, taskId:number): Observable<any> {
+  getEssaysByTask(course: string, taskId:number): Observable<any> {   //@GetMapping("/{name}/tasks/{taskId}/myEssays")
     console.log('------------->getEssaysByTask');
-    let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/essays';
+    let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/myEssays';
     return this.http.get<any>(path);
   }
 
