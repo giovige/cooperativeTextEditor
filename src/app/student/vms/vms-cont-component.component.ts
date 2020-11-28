@@ -49,7 +49,7 @@ export class VmsContComponentComponent implements OnInit {
   
 
     @Input()
-    actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null,idCreatore: null, screenVm: null};
+    actualVm: Vm = { id: null, vcpu: null, gbdisk: null, gbram: null, status: null,idCreatore: null, screenVm: null};
     
       
 

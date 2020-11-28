@@ -4,16 +4,16 @@ import { Student } from './student.model';
 export class Vm {
     id: number;
     vcpu: number;
-    GBDisk: number;
-    GBRam: number;
+    gbdisk: number;
+    gbram: number;
     status: string;
     idCreatore: string;
     screenVm: any;
 
     constructor(    id: number,
         vcpu: number,
-        GBDisk: number,
-        GBRam: number,
+        gbdisk: number,
+        gbram: number,
         status: string,
         idCreatore: string,
         screenVm: any
@@ -21,8 +21,8 @@ export class Vm {
         this.id=id;
         this.status=status;
         this.vcpu=vcpu;
-        this.GBDisk=GBDisk;
-        this.GBRam=GBRam;
+        this.gbdisk=gbdisk;
+        this.gbram=gbram;
         this.idCreatore=idCreatore;
         this.screenVm= screenVm;
     }

@@ -1,14 +1,28 @@
 <p mat-dialog-title><mat-icon>create</mat-icon>&nbsp;Aggiungi una nuova VM</p>
 
 <mat-dialog-content class="mat-login">
-    <form #vmform class="addvmform" autocomplete="off" [formGroup]="form">
+    <form #vmform class="addvmform" autocomplete="off" [formGroup]="form" enctype="multipart/form-data">
     <section>
     <p>Specifica i parametri della nuova Virtual Machine.</p>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
 
-      <mat-form-field class="example-full-width" appearance="fill">
+    <!-- ------------------------------------------------------------------------------------------------------------------------- -->
+
+    <br>
+    <div class="form-field">
+      <label class="text-white">Carica immagine</label><br>
+      <input type="file" id="customFile" formControlName="testo" (change)="selectFile($event)">
+    </div>
+    <br>
+    
+      
+    <!-- ------------------------------------------------------------------------------------------------------------------------- -->
+      <!-- <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Id:</mat-label>
           <input matInput placeholder="Ex. 1234" disabled>
-      </mat-form-field>
+      </mat-form-field> -->
           
       <mat-form-field appearance="fill">
           <mat-label>vCPU</mat-label>

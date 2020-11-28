@@ -129,8 +129,8 @@ export class StudentService {
 
 
   changeVmParameters(stud_id: string, teamId: number, vmId: number, newparams: Vm): Observable<any> {
-    let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId + '/edit';
-    return this.http.put<any>(path, {vcpus: newparams.vcpu, gbram: newparams.GBRam, gbdisk: newparams.GBDisk}, this.httpOptions);
+    let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId + '/changeParams';
+    return this.http.put<any>(path, {vcpus: newparams.vcpu, gbram: newparams.gbram, gbdisk: newparams.gbdisk}, this.httpOptions);
   }
 
 
@@ -141,6 +141,15 @@ export class StudentService {
     let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vm';
     return this.http.post<any>(path, {dto: newVM}, this.httpOptions);
   }
+
+
+  setImageVM(stud_id: string, teamId: number, vmId: number, imageFile: File) {
+    const data: FormData = new FormData();
+    data.append('imageFile', imageFile);
+    let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId;
+    return this.http.put(path, data, { reportProgress: true, responseType: 'text'});
+  }
+
 
 
   deleteVM(stud_id: string, teamId: number, vmId: number ): Observable<any> {
