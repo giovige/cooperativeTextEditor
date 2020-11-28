@@ -128,9 +128,9 @@ export class StudentService {
   }
 
 
-  changeVmParameters(): Observable<any> {
-    //console.log('------------->changeVmParameters');
-    return;
+  changeVmParameters(stud_id: string, teamId: number, vmId: number, newparams: Vm): Observable<any> {
+    let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId + '/edit';
+    return this.http.put<any>(path, {vcpus: newparams.vcpu, gbram: newparams.GBRam, gbdisk: newparams.GBDisk}, this.httpOptions);
   }
 
 
@@ -175,14 +175,11 @@ export class StudentService {
 /*
 API/courses
 
-@GetMapping(""{name}/tasks")
-public List<TaskDTO> getTasks(@PathVariable String name) {
-__________________________________________________________
-@GetMapping("/{name}/tasks/{taskId}/essays")
-public List<EssayDTO> getEssays(@PathVariable String taskId, @PathVariable String name
-____________________________________________________________
-@PostMapping("/{name}/tasks/{taskId}/essay")
-public EssayDTO createEssay(@PathVariable String name, @PathVariable String taskId, @RequestBody Map<String, Object> data) {
+    @GetMapping("/{name}/tasks/{taskId}/myEssays")
+    public List<EssayDTO> getStudentEssay(@PathVariable String taskId, @PathVariable String name, @PathVariable String essayId,@AuthenticationPrincipal UserDetails userDetails){
+     
+
+
     
 */
 }

@@ -4,7 +4,8 @@ import {Student} from 'src/app/student.model'
 import {SelectionModel, DataSource} from '@angular/cdk/collections';
 import { Vm } from '../../vm.model';
 import {MatDialogModule,MatDialog} from '@angular/material/dialog'; 
-import {AddVmDialogComponent} from './add-vm-dialog.component';
+import {AddVmDialogComponent} from './add_vm/add-vm-dialog.component';
+import {EditVmDialogComponent} from './edit_vm/edit-vm-dialog.component';
 import { AuthService } from 'src/app/auth/auth.service';
 import { StudentService } from 'src/app/service/student.service';
 import { ActivatedRoute } from '@angular/router';
@@ -42,7 +43,6 @@ export class VmsContComponentComponent implements OnInit {
     });
     //console.log('ngOnInit  ');
     
-
   }
 
 
@@ -51,18 +51,10 @@ export class VmsContComponentComponent implements OnInit {
     @Input()
     actualVm: Vm = { id: null, vcpu: null, GBDisk: null, GBRam: null, status: null,idCreatore: null, screenVm: null};
     
-    
-    
-    /* dataSource: Vm[] = [
-      { id: 1, vcpu: 13, GBDisk: 54, GBRam: 76, status: 1, idCreatore: 's263206'},
-      { id: 2, vcpu: 54, GBDisk: 548, GBRam: 6, status: 0, idCreatore: 's200043'},
-      { id: 3, vcpu: 545, GBDisk: 86, GBRam: 65, status: 0, idCreatore: 's263206'}
-    ]; */
+      
 
-  
-
-
-    openDialog(): void {
+    //ADD
+    openDialogAdd(): void {
       const dialogRef = this.dialog.open(AddVmDialogComponent, {
         width: '300px',
         data: { studId: this.studentID, coursename: this.coursename, teamId: this.teamId }
@@ -75,12 +67,30 @@ export class VmsContComponentComponent implements OnInit {
 
 
 
+    //EDIT
+    openDialogEdit(vmId: number): void {
+      console.log('-entro in openDialogEdit');
+      let vmtoedit:Vm[] = this.dataSource.filter(e => e.id === vmId);
+      console.log(vmtoedit);
+      const dialogRef = this.dialog.open(EditVmDialogComponent, {
+        width: '300px',
+        data: { studId: this.studentID, coursename: this.coursename, teamId: this.teamId, vm: vmtoedit[0], vmId: vmId }
+    });
+      dialogRef.afterClosed().subscribe( 
+        res => {
+        console.log('all ok');
+      }
+      );
+      
+    }
+
+
+
 
     getTeamVms(stud_id: string, teamId: number): void {
     //GetMapping("/{id}/teams/{teamId}/vms")                getVm from team
       this.studentService.getStudentVMsByCourse(stud_id,teamId).subscribe( v => {
         this.dataSource = v;
-        //console.log(this.dataSource);
       });
 
     }
@@ -100,12 +110,7 @@ export class VmsContComponentComponent implements OnInit {
         this.getTeamVms(this.studentID, this.teamId);
       });
     }
-
-
-    modifyVM(vmId: number): void {
-      alert('modifichiamoo');
-    }
-    
+   
 
     connect(vmId: number): void {
       alert('connessionee');

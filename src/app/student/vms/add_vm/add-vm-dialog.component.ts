@@ -29,7 +29,7 @@ export class AddVmDialogComponent implements OnInit {
     });
     this.studId = data.studId;
     this.coursename = data.coursename;
-    this. teamId = data.teamId;
+    this.teamId = data.teamId;
    }
 
   ngOnInit(): void {

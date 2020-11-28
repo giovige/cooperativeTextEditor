@@ -1,5 +1,5 @@
 <section>
-     <button mat-raised-button (click)="openDialog()" class="addvm" color="warn"><mat-icon>add</mat-icon>&nbsp;New Vm</button> 
+     <button mat-raised-button (click)="openDialogAdd()" class="addvm" color="warn"><mat-icon>add</mat-icon>&nbsp;New Vm</button> 
 </section>
 
 <div class="division">
@@ -29,7 +29,7 @@
     <button mat-mini-fab *ngIf="virt.status==='Spenta'" class="action" color="primary" title="Avvia" (click)="changeVMstatus(virt.id)"><mat-icon>play_arrow</mat-icon></button>
     <button mat-mini-fab *ngIf="virt.status==='Accesa'" class="action" color="primary" title="Stop" (click)="changeVMstatus(virt.id)"><mat-icon>stop</mat-icon></button>
     <button mat-mini-fab class="action" color="primary" (click)="deleteVM(virt.id)" title="Elimina" ><mat-icon>delete</mat-icon></button>
-    <button mat-mini-fab *ngIf="virt.status==='Spenta'" class="action" color="primary" title="Modifica" (click)="modifyVM(virt.id)"><mat-icon>edit</mat-icon></button>
+    <button mat-mini-fab *ngIf="virt.status==='Spenta'" class="action" color="primary" title="Modifica" (click)="openDialogEdit(virt.id)"><mat-icon>edit</mat-icon></button>
     <button mat-mini-fab *ngIf="virt.status==='Accesa'" class="action" color="primary" title="Collegati" (click)="connect(virt.id)"><mat-icon>open_in_new</mat-icon></button>
 
   </mat-card-actions>

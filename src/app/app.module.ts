@@ -30,9 +30,10 @@ import { AuthInterceptor } from './auth/authInterceptor';
 import { GroupsContComponent } from './student/groups/groups-cont.component';
 import {MatExpansionModule,MatAccordion} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
-import { AddVmDialogComponent } from './student/vms/add-vm-dialog.component';
+import { AddVmDialogComponent } from './student/vms/add_vm/add-vm-dialog.component';
 import { TaskContComponent } from './student/tasks/task-cont.component';
 import { HomeComponent } from './home/home.component';
+import { EditVmDialogComponent } from './student/vms/edit_vm/edit-vm-dialog.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { HomeComponent } from './home/home.component';
     GroupsContComponent,
     AddVmDialogComponent,
     TaskContComponent,
-    HomeComponent
+    HomeComponent,
+    EditVmDialogComponent
   ],
   imports: [
     BrowserModule,
