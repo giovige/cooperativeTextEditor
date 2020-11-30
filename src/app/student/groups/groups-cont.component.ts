@@ -16,6 +16,7 @@ import {StudentService} from 'src/app/service/student.service';
 import { ActivatedRoute } from '@angular/router';
 import { Group } from 'src/app/group.model';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Token } from 'src/app/token.model';
 
 
 
@@ -32,9 +33,14 @@ export class GroupsContComponent implements OnInit {
   inAteamObs: Observable<any>;
   studentID: string;
   group: Student[];
-  groupName:string='gruppo2';
   currentTeam: Group;
   team_id: string;
+  team_name: string;
+  nogroup:boolean;
+
+  requestMap: Map<Token, Student[]>;
+  
+
 
   @ViewChild('table') table: MatTable<Element>;
 
@@ -44,6 +50,7 @@ export class GroupsContComponent implements OnInit {
   
   constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
     this.currentTeam = null;
+    this.nogroup=false;
    }
 
 
@@ -54,23 +61,59 @@ export class GroupsContComponent implements OnInit {
       this.course_name = p['course_name'];
       this.studentID = this.authService.getStudentId();
       
-      //this.getTeam(this.studentID,this.course_name);
-      console.log(this.team_id);
       
       this.inAteamObs = this.studentService.studentHasTeam(this.studentID, this.course_name);
       
+
+      this.studentService.getStudentTeamByCourse(this.studentID, this.course_name).subscribe(
+        res => {
+          if(res!==null) {
+            //false - cerco componenti gruppo
+            console.log('1--------cie un gruppoooo')
+            console.log(res);
+            this.team_id = res.id; 
+            this.team_name = res.name;  
+            this.studentService.getTeamMembers(this.team_id).subscribe(
+              s => {
+                this.group = s;
+              });
+
+          }else{
+            //true - cerco persone libere
+            console.log('2--------NO gruppoooo')
+            this.studentService.getNoTeamStudents(this.course_name).subscribe(
+              s => {
+                this.freeStudents = s;
+              } 
+            );
+
+            this.studentService.getTeamRequests(this.studentID, this.course_name).subscribe(
+              tkn => {
+                console.log(tkn);
+                this.studentService.getInvitedToAGroup(this.studentID, this.course_name, tkn.teamId).subscribe(
+                  s => {
+                    this.requestMap.set(tkn, s);
+                  }
+                );
+
+                //qui per ogni teamId devo trovare i partecipanti e il nome
+              },
+              err => {
+                console.log('nessuna richiesta gruppo!');
+              }
+            );
+          }
+
+
+
+        }
+      )
       
       
-      //TODO
-      /* if(this.team_id!==null){
-        console.log('NON.NULL');
-        console.log(this.currentTeam);
-        console.log(this.team_id);
-        this.alreadyInGroup = true;
-        this.getMembers(this.team_id);
-      } */
+     
       
     });
+    console.log(this.inAteamObs);
     
 
   }
@@ -115,18 +158,9 @@ sendRequest() {     //@@@@@@invia richiesta
 }
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
- 
-/* group: Student[] = [{ id: '261098', serial:'1', name: 'ini', firstName: 'enzo', courseId: '432', groupId:'32'}, 
-                    { id: '261088', serial:'2', name: 'bianchi', firstName: 'paolo', courseId: '34', groupId:'33'} 
-]; */
-
 
 
 groupColumns: string[] = ['select','name', 'firstName'];
-/* group: Student[];
-groupName:string='gruppo2'; */
-
-
 
 
 
@@ -160,9 +194,10 @@ getTeam(id: string, c: string): void{
 getMembers(teamId:string): void {
   this.studentService.getTeamMembers(teamId)
   .subscribe( s => {
-    console.log('getMermers()');
+    console.log('getMermbers()');
     console.log(s);
-    this.group = s} );
+    this.group = s
+  });
 }
 
 
@@ -183,15 +218,12 @@ teamExist(id: string, c: string): void{
 
  */
 
-alreadyInGroup(c: string) {
-  //console.log('pacchiufaiii    '+ c);
-  return this.studentService.studentHasTeam(this.studentID, c).subscribe(
-    b => {
-      console.log(b);
-      return b;  
-    }
-  );
-}
+
+
+
+
+
+
 
 
 }

@@ -6,6 +6,8 @@ import { concatAll, mergeMap } from 'rxjs/operators';
 import { AppComponent } from '../app.component';
 import { Group } from '../group.model';
 import { Vm } from '../vm.model';
+import { Essay } from '../essay.model';
+import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 
 
 @Injectable({
@@ -76,13 +78,11 @@ export class StudentService {
   //------------------------------------->NUOVE API STUDENTE<----------------------------------------------------------------------
 
   studentHasTeam(stud_id: string, course: string): Observable<boolean> {
-    //console.log('quiuiufijckvb   '+ stud_id + '  ' + course);
     return this.http.get<boolean>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/hasTeam');
   }
 
 
   getStudentTeamByCourse(stud_id: string, course: string): Observable<any> {    //prende GRUPPO dello studente relativo ad un corso
-    //console.log('------------->getStudentTeamByCourse');
     return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/teams');
   }
 
@@ -95,9 +95,8 @@ export class StudentService {
 
   
 
-  getNoTeamStudents(course: string) {   //prende Studenti senza gruppo
-    //console.log('------------->getNoTeamStudents');
-    return this.http.get<string[]>(this.API_PATH + 'courses/' + course +'/availableStudents');
+  getNoTeamStudents(course: string): Observable<any>  {   //prende Studenti senza gruppo
+    return this.http.get<Student[]>(this.API_PATH + 'courses/' + course +'/availableStudents');
   }
 
   addTeamRequest() {      //manda richiesta per un nuovo gruppo
@@ -106,23 +105,24 @@ export class StudentService {
   }
 
 
-  getTeamRequests(stud_id: string, course: string) {     //richieste di uno studente per aderire a gruppi
-    //console.log('------------->getTeamRequests');
+  getTeamRequests(stud_id: string, course: string): Observable<any>  {     //richieste di uno studente per aderire a gruppi
     return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/requests');
+  }
+
+  getInvitedToAGroup(stud_id: string, course: string, teamId: number): Observable<any>  {
+    let path = this.API_PATH + 'students/' + stud_id + '/courses/' + course + '/teams/' + teamId +'/studentsrequests';
+    return this.http.get<any>(path);
   }
 
 
   //----------------------------------------------tab_VM------------------------------------------------------------------
 
   getStudentVMsByCourse(stud_id: string, teamId: number): Observable<any> {    // GetMapping("/{id}/teams/{teamId}/vms") 
-    //console.log('------------->getStudentVMsByCourse');
     return this.http.get<Vm[]>(this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms');
   }
 
 
   changeStatusToVM(stud_id: string, teamId: number, vmId: number): Observable<any> {
-    //console.log('------------->changeStatusToVM');
-    //PutMapping("/{id}/teams/{teamid}/vms/{vmId}/switch")
     let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId + '/switch';
     return this.http.put<any>(path, {vmId}, this.httpOptions);
   }
@@ -135,8 +135,6 @@ export class StudentService {
 
 
   createNewVM (stud_id: string, teamId: number, newVM: Vm): Observable<any> {
-    //console.log('------------->createNewVM');
-    //PostMapping("/{id}/teams/{teamId}/vm")
     let dto = JSON.stringify(newVM);
     let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vm';
     return this.http.post<any>(path, {dto: newVM}, this.httpOptions);
@@ -153,8 +151,6 @@ export class StudentService {
 
 
   deleteVM(stud_id: string, teamId: number, vmId: number ): Observable<any> {
-    //console.log('------------->deleteVM');
-    //DeleteMapping("/{id}/teams/{teamid}/vms/{vmId}")
     let path = this.API_PATH + 'students/' + stud_id + '/teams/' + teamId +'/vms/' + vmId;
     return this.http.delete<any>(path, this.httpOptions);
   }
@@ -167,28 +163,42 @@ export class StudentService {
     return this.http.get<any>(path);
   }
 
-  getEssaysByTask(course: string, taskId:number): Observable<any> {   //@GetMapping("/{name}/tasks/{taskId}/myEssays")
+/*   getEssaysByTask(course: string, taskId:number): Observable<any> {   //@GetMapping("/{name}/tasks/{taskId}/myEssays")
     console.log('------------->getEssaysByTask');
     let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/myEssays';
     return this.http.get<any>(path);
+  } */
+
+  getEssayIfExists(course: string, taskId:number,stud_Id: string): Observable<any> {   
+    let path = this.API_PATH + 'courses/'+ course + '/task/' + taskId + '/studentId/' + stud_Id + '/essay';
+    return this.http.get<Essay>(path);
   }
 
-
-  addStudentEssay(course: string, taskId:number): Observable<any> {   //sottomette un elaborato scritto dallo studente
-    console.log('------------->addStudentEssay');
-    let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/essay';
+  createFirstEssay(course: string, taskId:number): Observable<any> {
+    let path = this.API_PATH + 'courses/'+ course + '/task/' + taskId + '/essay';
     return this.http.post<any>(path, {} ,this.httpOptions);
   }
 
 
-/*
-API/courses
-
-    @GetMapping("/{name}/tasks/{taskId}/myEssays")
-    public List<EssayDTO> getStudentEssay(@PathVariable String taskId, @PathVariable String name, @PathVariable String essayId,@AuthenticationPrincipal UserDetails userDetails){
-     
+  getEssayStorical(course: string, stud_Id: string, taskId:number, essayId: number ): Observable<any> {
+    let path = this.API_PATH + 'courses/'+ course + '/student/' + stud_Id + '/tasks/' + taskId + '/essays/' + essayId + '/mystorical';
+    return this.http.get<any>(path);
+  }
 
 
+
+  addStudentEssay(course: string, taskId:number, essayId: number, imageFile: File) {   
+    //sottomette un elaborato scritto dallo studente
+    const data: FormData = new FormData();
+    data.append('imageFile', imageFile);
+    let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/essays/' + essayId;
+    return this.http.put(path, data, { reportProgress: true, responseType: 'text'});
+  }
+  
+  /* setImageEssay(course: string, taskId:number, essayId: number, imageFile: File) {
+    const data: FormData = new FormData();
+    data.append('imageFile', imageFile);
     
-*/
+  } */
+
 }

@@ -69,7 +69,6 @@ export class VmsContComponentComponent implements OnInit {
 
     //EDIT
     openDialogEdit(vmId: number): void {
-      console.log('-entro in openDialogEdit');
       let vmtoedit:Vm[] = this.dataSource.filter(e => e.id === vmId);
       console.log(vmtoedit);
       const dialogRef = this.dialog.open(EditVmDialogComponent, {
@@ -78,7 +77,7 @@ export class VmsContComponentComponent implements OnInit {
     });
       dialogRef.afterClosed().subscribe( 
         res => {
-        console.log('all ok');
+        this.getTeamVms(this.studentID, this.teamId);
       }
       );
       

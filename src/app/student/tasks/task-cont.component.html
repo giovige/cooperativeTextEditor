@@ -77,67 +77,57 @@
 
     <div id="inner2" *ngIf="taskId!==0">
       <section>
-          <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati per task #{{taskId}} </span>
+          <span class="mat-title"><mat-icon>chevron_right</mat-icon>Elaborato per task #{{taskId}} </span>
       </section>
 
       
 
-      <form class="addEssayForm">
-        <section>
-        <mat-form-field class="essayform-width">
-  
-          <mat-label>Aggiungi elaborato</mat-label>  
-          <input #addField type="text" matInput placeholder="Ex. elaborato_1 ..."  [formControl]="essayControl" >
-        
-        </mat-form-field>
-        
-        <button class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" >Aggiungi</button>
-          <!-- <button *ngIf="taskId===0; elseButton" class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" disabled>Aggiungi</button>
-          <ng-template #elseButton>
-          <button class="addButton" mat-button (click)="addEssay(taskId); addField.value=''" >Aggiungi</button>
-          </ng-template>  -->
-      
-        </section>
+   
+      <form [formGroup]="form" (ngSubmit)="addEssay()" enctype="multipart/form-data">
+      <div class="form-field" *ngIf="essay">
+        <label class="text-white">Carica elaborato (jpg,png,...)</label><br>
+        <input type="file" id="customFile" formControlName="testo" (change)="selectFile($event)">
+
+         <button class="addButton" mat-button >Aggiungi</button>
+      </div>
       </form>
-       
       
-      <table mat-table #table [dataSource]="essays" matSort > 
+    <br>
+    <br>
+    
+    <mat-list>
+      <mat-list-item *ngIf="essay">
+        <mat-icon mat-list-icon style="font-size: 35px;">note</mat-icon>
+        <div mat-line>Elaborato Id: {{essay.id}}</div>
+        <div mat-line *ngIf="essay.stato==='Terminato'; else elseline">Stato: {{essay.stato}}   Voto: {{essay.voto}}</div>
+        <ng-template #elseline><div mat-line> Stato: {{essay.stato}}</div></ng-template>
+        <div mat-line *ngIf="essay.lastModified">Ultima modifica: {{essay.lastModified}} </div>
+        <div mat-line>
+          <button mat-stroked-button (click)="showStorical()" class="storical" color="warn">&nbsp;Vedi storico</button> 
+        </div>
+      </mat-list-item>
+    </mat-list>
 
-  
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef > Id </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-  
-        <!-- vote Column -->
-        <ng-container matColumnDef="voto">
-          <th mat-header-cell *matHeaderCellDef > Voto </th>
-          <td mat-cell *matCellDef="let element"> {{element.voto}} </td>
-        </ng-container>
-  
-  
-        <!-- status Column -->
-        <ng-container matColumnDef="stato">
-          <th mat-header-cell *matHeaderCellDef > Stato </th>
-          <td mat-cell *matCellDef="let element"> {{element.stato}} </td>
-        </ng-container>
-  
-        <!-- status Column -->
-        <ng-container matColumnDef="lastModified">
-          <th mat-header-cell *matHeaderCellDef > Ultima modifica </th>
-          <td mat-cell *matCellDef="let element"> {{element.lastModified}} </td>
-        </ng-container>
+    <br>
+    <br>
 
+    <div *ngIf="hasStorical">
+      <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
-
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-  
-      </table>
+      <mat-list>
+        <div mat-subheader>Versioni sottomesse</div>
+        <mat-list-item *ngFor="let img of essayImages">
+          <mat-icon mat-list-icon style="font-size: 35px;">image</mat-icon>
+          <div mat-line>Nome: {{img.filename}} </div>
+          <div mat-line>Creato da: {{img.idCreator}}</div>
+          <div mat-line>Data: {{img.creationDate}}</div>
+        </mat-list-item>
+      </mat-list>
 
 
 
+    </div>
 
 
 

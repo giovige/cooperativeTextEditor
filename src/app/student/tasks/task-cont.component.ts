@@ -1,9 +1,13 @@
+import { DataSource } from '@angular/cdk/table';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { endWith } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Essay } from 'src/app/essay.model';
+import { Image } from 'src/app/image.model';
 import { StudentService } from 'src/app/service/student.service';
 import { Task } from 'src/app/task.model';
 
@@ -17,43 +21,38 @@ export class TaskContComponent implements OnInit {
   coursename: string;
   taskId: number;
   essayId: number;
+  studId: string;
+  essay: Essay;
+
+  columnsToDisplay: string[] = ['id', 'voto', 'stato', 'lastModified'];
+  essayImages: Image[];
+  tasks: Task[];
+  hasStorical: boolean;
+
+  /*Form aggiunta elaborato*/
+  selectedFiles: FileList;
+  currentFileUpload: File;
+  selectedFile = null;
+  changeImage = false;
+  form: FormGroup;
+ 
+
 
   constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private authService: AuthService) {
     this.taskId=0;
+    this.hasStorical=false;
    }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe( p => {
       this.coursename = p['course_name'];
+      this.studId = this.authService.getStudentId();
       this.loadTasks();
     });
+    this.inizializza_form();
   }
 
-  
-  /*----------------------------------- lista consegne ---------------------------------------------*/
 
-  /* tasks: Task[] = [{id: 1, dataRilascio: '01012020' ,dataScadenza: '31122020', description: ''},
-  {id: 2, dataRilascio: '01012020' ,dataScadenza: '31122020', description: ''},
-  {id: 3, dataRilascio: '02012020' ,dataScadenza: '31122020', description: ''},
-  ]; */
-
-  tasks: Task[];
-
-
-
-/*----------------------------------- lista elaborati ---------------------------------------------*/
-columnsToDisplay: string[] = ['id', 'voto', 'stato', 'lastModified'];
-essayControl = new FormControl();
-
-
-essays: Essay[];
-
-
-
-clickedTask(id: number):void {
-  this.taskId = id;
-  this.loadEssays(this.taskId);
-}
 
 loadTasks():void {
   this.studentService.getTasksForCourse(this.coursename).subscribe(v => {
@@ -61,19 +60,110 @@ loadTasks():void {
   });
 }
 
+clickedTask(id: number):void {
+  this.taskId = id;
+  this.essay = null;
+  this.hasStorical=false;
 
-loadEssays(taskId: number):void {
-  this.studentService.getEssaysByTask(this.coursename, taskId).subscribe(
-    v => {
-      this.essays = v;
+  //TODO: aggiungere dialog con viualizzazione img Task
+  
+  this.studentService.getEssayIfExists(this.coursename, id, this.studId).subscribe(
+    res => {
+      this.essayId = res.id;
+      this.essay = res;
+      console.log('qui');
+      console.log('exist essay id = '+ res.id);
+
+      this.studentService.getEssayStorical(this.coursename, this.studId,this.taskId,this.essayId) .subscribe(
+        img => {
+          this.essayImages = img;
+          console.log(this.essayImages);
+        }
+      );
+    },
+    err => {
+      this.studentService.createFirstEssay(this.coursename, id).subscribe(
+        ess => {
+          console.log('new essay id = '+ ess.id);
+          this.essayId = ess.id;
+        }
+      );
     }
   );
+  
+  
+  
+  //this.loadEssays(this.taskId);
 }
 
 
-addEssay(taskId: number):void {
-  this.studentService.addStudentEssay(this.coursename, taskId).subscribe();
+
+  showStorical(){
+    if(this.hasStorical===true)
+      this.hasStorical=false;
+    else
+      this.hasStorical=true;
+  }
+
+
+  /* loadEssays(taskId: number):void {
+    this.studentService.getEssaysByTask(this.coursename, taskId).subscribe(
+      v => {
+        this.essays = v;
+      }
+    );
+  } */
+
+
+
+
+
+
+change($event) {
+  this.changeImage = true;
 }
+
+changedImage(event) {
+  this.selectedFile = event.target.files[0];
+}
+
+selectFile(event) {
+  this.selectedFiles = event.target.files;
+}
+
+inizializza_form() {
+  this.form = new FormGroup({
+    'testo': new FormControl()
+  });
+}
+
+
+addEssay():void {
+  this.studentService.addStudentEssay(this.coursename, this.taskId,this.essayId,this.currentFileUpload).subscribe(
+    s => {
+      console.log(s);   
+
+    this.selectedFiles = undefined;
+    },
+
+    err => {
+      alert("Si è verificato un errore!")
+    }
+
+  );
+}  
+
+
+
+
+
+
+
+
+ 
+
+
+
 
 
 

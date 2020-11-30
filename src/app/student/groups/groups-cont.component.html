@@ -1,214 +1,201 @@
-<!-- <div class="container" *ngIf="alreadyInGroup; else elseBlock">                      *ngIf="alreadyInGroup(course_name); else elseBlock"-->
-  <div class="container" *ngIf="inAteamObs | async; else elseBlock">
-    <span class="mat-title"><mat-icon>chevron_right</mat-icon>Componi il tuo gruppo</span>
-    
-        <form class="addgroupform">
-          <section>
-    
-            <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Me:</mat-label>
-                <input matInput placeholder="Ex. Mario Rossi" value={{actualUser.name}} disabled>
-            </mat-form-field>
-    
-            <mat-form-field appearance="fill">
-                <mat-label>Nome gruppo</mat-label>
-                <input matInput>
-            </mat-form-field>
-            
-            <mat-form-field appearance="fill">
-                <mat-label>Timeout richiesta</mat-label>
-                <input matInput type="number" placeholder="Ex. 24"  min="1">
-                <span matSuffix>hours</span>
-            </mat-form-field>
-    
-          </section>
-        
-        </form>
-    
-         <br>
-        
-        
-    
-        <table mat-table #table [dataSource]="freeStudents" matSort > 
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)">
-                
-              </mat-checkbox>
-            </td>      
-          </ng-container>
-    
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> Id </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-          </ng-container>
+
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+
+
+    <div class="container" *ngIf="inAteamObs | async ; else elseBlock">
+      <!-- <span class="mat-title"><mat-icon>label_important</mat-icon>Il mio Gruppo:</span> -->
+  
+      <mat-form-field style="width:10vw; height: 4vw;" class="nomegruppo" appearance="fill">
+        <mat-label style="text-align: left;"><mat-icon>label_important</mat-icon>Il mio Gruppo:</mat-label>
+        <input matInput style="text-align: center;" class="grouptext" value={{team_name}} disabled>
+      </mat-form-field>
+  
+      <table mat-table #table [dataSource]="group" matSort > 
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon mat-list-icon>perm_identity</mat-icon>
+          </td>      
+        </ng-container>
+  
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef > Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef > FirstName </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+        </ng-container>
          
-          <ng-container matColumnDef="serial">
-            <th mat-header-cell *matHeaderCellDef> Serial </th>
-            <td mat-cell *matCellDef="let element"> {{element.serial}} </td>
-          </ng-container>
-    
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef > Name </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-    
-          <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef > FirstName </th>
-            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
-          </ng-container>
-           
-          <tr mat-header-row *matHeaderRowDef="studentColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: studentColumns;"
-          (click)="selection.toggle(row)"  ></tr>       
-        </table>
-    
-        <br>
-        <button class="sendRequest" mat-button (click)="sendRequest()" >Invia richiesta gruppo</button>
-      
-    
-    
-        <br>
-        <br>
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <br>
-        
-    
-      
-    
-    <!-- LISTA RICHIESTE GRUPPO -->
-    <span class="mat-title"><mat-icon>chevron_right</mat-icon>Richieste di partecipazione a gruppi</span>
-     <br>
-     <br>
-    
-    <!-- 
-      <ul class="request">
-        <li *ngFor="let prop of proposals"> 
-          <span class="proposeItem">{{stud.id}} {{stud.name}} {{stud.firstName}}</span>
-        </li>
-      </ul>
-     -->
-    
-     <mat-accordion>
-     
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            nomegruppo2
-          </mat-panel-title>
-    
-          <mat-panel-description>   
-            <div class="example-button-row">
-              <button mat-raised-button class="success">Accetta</button>
-              <button mat-raised-button class="reject">Rifiuta</button>        
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        
-        <p>studente1 ...</p>
-        <p>studente2 ...</p>
-      </mat-expansion-panel>  
-    
-      <mat-divider></mat-divider>
-    
-    
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            nomegruppo2
-          </mat-panel-title>
-    
-          <mat-panel-description>   
-            <div class="example-button-row">
-              <button mat-raised-button class="success">Accetta</button>
-              <button mat-raised-button class="reject">Rifiuta</button>        
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-    
-        <p>studente1 ...</p>
-        <p>studente2 ...</p>
-      </mat-expansion-panel> 
-      
-    
-      
-      
-    </mat-accordion>
-    
-    
-    
+        <tr mat-header-row *matHeaderRowDef="groupColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: groupColumns;"></tr>       
+      </table>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <!-- LISTA COMPONENTI GRUPPO -->
-    
-    <ng-template #elseBlock>
-    <!-- <div>
-      <mat-list>
-        <span class="mat-title"><mat-icon>label_important</mat-icon>Il mio Gruppo</span>
-        <div mat-subheader>NomeGruppo</div>
-        <mat-list-item *ngFor="let s of group">
-          <mat-icon mat-list-icon>perm_identity</mat-icon>
-          <div mat-line>{{s.name}} {{s.firstName}}</div>
-          <div mat-line> {{s.id}} </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-      </mat-list>
-    </div> -->
 
-    <div>
-    <!-- <span class="mat-title"><mat-icon>label_important</mat-icon>Il mio Gruppo:</span> -->
 
-    <mat-form-field style="width:10vw; height: 4vw;" class="nomegruppo" appearance="fill">
-      <mat-label style="text-align: left;"><mat-icon>label_important</mat-icon>Il mio Gruppo:</mat-label>
-      <input matInput style="text-align: center;" class="grouptext" value={{groupName}} disabled>
-    </mat-form-field>
 
-    <table mat-table #table [dataSource]="group" matSort > 
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <mat-icon mat-list-icon>perm_identity</mat-icon>
-        </td>      
-      </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef > Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
+  <ng-template #elseBlock>    
 
-      <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef > FirstName </th>
-        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
-      </ng-container>
+
+    <div class="container" >
+      <span class="mat-title"><mat-icon>chevron_right</mat-icon>Componi il tuo gruppo</span>
+      
+          <form class="addgroupform">
+            <section>
+      
+              <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Me:</mat-label>
+                  <input matInput placeholder="Ex. Mario Rossi" value={{actualUser.name}} disabled>
+              </mat-form-field>
+      
+              <mat-form-field appearance="fill">
+                  <mat-label>Nome gruppo</mat-label>
+                  <input matInput>
+              </mat-form-field>
+              
+              <mat-form-field appearance="fill">
+                  <mat-label>Timeout richiesta</mat-label>
+                  <input matInput type="number" placeholder="Ex. 24"  min="1">
+                  <span matSuffix>hours</span>
+              </mat-form-field>
+      
+            </section>
+          
+          </form>
+      
+           <br>
+          
+          
+      
+          <table mat-table #table [dataSource]="freeStudents" matSort > 
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
+                  
+                </mat-checkbox>
+              </td>      
+            </ng-container>
+      
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef> Id </th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="serial">
+              <th mat-header-cell *matHeaderCellDef> Serial </th>
+              <td mat-cell *matCellDef="let element"> {{element.serial}} </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef > Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef > FirstName </th>
+              <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+            </ng-container>
+             
+            <tr mat-header-row *matHeaderRowDef="studentColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: studentColumns;"
+            (click)="selection.toggle(row)"  ></tr>       
+          </table>
+      
+          <br>
+          <button class="sendRequest" mat-button (click)="sendRequest()" >Invia richiesta gruppo</button>
+        
+      
+      
+          <br>
+          <br>
+          <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
+          <br>
+          
+      
+        
+      
+      <!-- LISTA RICHIESTE GRUPPO -->
+      <span class="mat-title"><mat-icon>chevron_right</mat-icon>Richieste di partecipazione a gruppi</span>
+       <br>
+       <br>
+      
+      <!-- 
+        <ul class="request">
+          <li *ngFor="let prop of proposals"> 
+            <span class="proposeItem">{{stud.id}} {{stud.name}} {{stud.firstName}}</span>
+          </li>
+        </ul>
+       -->
+      
+       <mat-accordion>
        
-      <tr mat-header-row *matHeaderRowDef="groupColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: groupColumns;"></tr>       
-    </table>
-  </div>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              nomegruppo2
+            </mat-panel-title>
+      
+            <mat-panel-description>   
+              <div class="example-button-row">
+                <button mat-raised-button class="success">Accetta</button>
+                <button mat-raised-button class="reject">Rifiuta</button>        
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          
+          <p>studente1 ...</p>
+          <p>studente2 ...</p>
+        </mat-expansion-panel>  
+      
+        <mat-divider></mat-divider>
+      
+      
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              nomegruppo2
+            </mat-panel-title>
+      
+            <mat-panel-description>   
+              <div class="example-button-row">
+                <button mat-raised-button class="success">Accetta</button>
+                <button mat-raised-button class="reject">Rifiuta</button>        
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+      
+          <p>studente1 ...</p>
+          <p>studente2 ...</p>
+        </mat-expansion-panel> 
+        
+      
+        
+        
+      </mat-accordion>
+      
+      
+      
+      </div>
 
-    
-    </ng-template>
-    
+
+
+  </ng-template>
