@@ -67,12 +67,7 @@ table {
     
   } 
 
-  .addButton {
-    position: absolute;
-    margin-left: 10px;
-    margin-top: 16px;
-    cursor: pointer;
-  }
+ 
 
   .deleteButton {
     margin-bottom: 1%;
@@ -106,4 +101,27 @@ table {
   
 }
 
+
+
+aside{
+  margin: 1%;
+
+}
+
+
+.addButton {
+  /* position: absolute; */
+  /* margin-left: 10px; */
+/*   margin-top: 16px; */  
+  position: relative;
+  cursor: pointer;
+  margin-left: 60%;
+}
+
+
+
+
+
   /*@@@@@@@@@@@@@@@@@@@*/
+
+  /*style="width: fit-content;border: ridge;border-color: dimgrey;"*/

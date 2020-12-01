@@ -29,6 +29,7 @@ export class TaskContComponent implements OnInit {
   tasks: Task[];
   hasStorical: boolean;
 
+
   /*Form aggiunta elaborato*/
   selectedFiles: FileList;
   currentFileUpload: File;
@@ -71,21 +72,17 @@ clickedTask(id: number):void {
     res => {
       this.essayId = res.id;
       this.essay = res;
-      console.log('qui');
       console.log('exist essay id = '+ res.id);
 
-      this.studentService.getEssayStorical(this.coursename, this.studId,this.taskId,this.essayId) .subscribe(
-        img => {
-          this.essayImages = img;
-          console.log(this.essayImages);
-        }
-      );
+      this.getStorical();
     },
     err => {
       this.studentService.createFirstEssay(this.coursename, id).subscribe(
         ess => {
           console.log('new essay id = '+ ess.id);
+          this.essay = ess;
           this.essayId = ess.id;
+          this.getStorical();
         }
       );
     }
@@ -93,7 +90,7 @@ clickedTask(id: number):void {
   
   
   
-  //this.loadEssays(this.taskId);
+  
 }
 
 
@@ -106,15 +103,15 @@ clickedTask(id: number):void {
   }
 
 
-  /* loadEssays(taskId: number):void {
-    this.studentService.getEssaysByTask(this.coursename, taskId).subscribe(
-      v => {
-        this.essays = v;
+
+  getStorical(){
+    this.studentService.getEssayStorical(this.coursename, this.studId,this.taskId,this.essayId) .subscribe(
+      img => {
+        this.essayImages = img;
+        console.log(this.essayImages);
       }
     );
-  } */
-
-
+  }
 
 
 
@@ -139,11 +136,13 @@ inizializza_form() {
 
 
 addEssay():void {
+  this.currentFileUpload = this.selectedFiles.item(0);
   this.studentService.addStudentEssay(this.coursename, this.taskId,this.essayId,this.currentFileUpload).subscribe(
     s => {
       console.log(s);   
-
-    this.selectedFiles = undefined;
+      this.getStorical();
+      this.selectedFiles = undefined;
+    
     },
 
     err => {

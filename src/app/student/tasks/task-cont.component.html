@@ -1,38 +1,3 @@
-<!-- <section>
-    <span class="mat-title"><mat-icon>chevron_right</mat-icon>Tasks (consegne del docente)</span> 
-</section>
-
-<div class="division">
-      <mat-card class="example-card" *ngFor="let cont of tasks">
-          <mat-card-title>
-          Task: {{cont.id}}
-          </mat-card-title>
-        <mat-card-subtitle>Data rilascio: {{cont.dataRilascio}}  -  
-        Data scadenza: {{cont.dataScadenza}}
-        </mat-card-subtitle>
-        <mat-card-content>
-        </mat-card-content>
-      </mat-card>      
-
-</div>
-
-
-<br>
-<br>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<mat-divider></mat-divider>
-<br>
-
-<div>
-   <span class="mat-title"><mat-icon>chevron_right</mat-icon>Lista elaborati</span>
-</div>
- -->
-
  <div id="wrapper">
   
 
@@ -82,16 +47,19 @@
 
       
 
-   
-      <form [formGroup]="form" (ngSubmit)="addEssay()" enctype="multipart/form-data">
+      <aside style="width: fit-content;border: ridge;border-color: dimgrey;">
+      <form [formGroup]="form" (ngSubmit)="addEssay()" enctype="multipart/form-data" style="margin: 0.5%;">
       <div class="form-field" *ngIf="essay">
         <label class="text-white">Carica elaborato (jpg,png,...)</label><br>
         <input type="file" id="customFile" formControlName="testo" (change)="selectFile($event)">
-
-         <button class="addButton" mat-button >Aggiungi</button>
+        <div >
+         <button mat-raised-button class="addButton" mat-button >Aggiungi</button>
+        </div>
       </div>
       </form>
-      
+      </aside>
+
+
     <br>
     <br>
     

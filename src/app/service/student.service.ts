@@ -8,6 +8,7 @@ import { Group } from '../group.model';
 import { Vm } from '../vm.model';
 import { Essay } from '../essay.model';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
+import { Token } from '../token.model';
 
 
 @Injectable({
@@ -70,7 +71,7 @@ export class StudentService {
 
 
   getStudentCourses(stud_id: string): Observable<any> {     
-    console.log('getStudentCourses');
+    //console.log('getStudentCourses');
     return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id +'/courses');
 
   }
@@ -87,7 +88,7 @@ export class StudentService {
   }
 
 
-  getTeamMembers(id: string): Observable<any> {
+  getTeamMembers(id: number): Observable<any> {
     return this.http.get<string[]>(this.API_PATH + 'students/' +  '/teams/' + id +'/members');
   }
 
@@ -105,13 +106,13 @@ export class StudentService {
   }
 
 
-  getTeamRequests(stud_id: string, course: string): Observable<any>  {     //richieste di uno studente per aderire a gruppi
-    return this.http.get<string[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/requests');
+  getTeamRequests(stud_id: string, course: string): Observable<any>  {    //richieste di uno studente per aderire a gruppi (requests = tokenDTO)
+    return this.http.get<Token[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/requests');
   }
 
-  getInvitedToAGroup(stud_id: string, course: string, teamId: number): Observable<any>  {
+  getInvitedToAGroup(stud_id: string, course: string, teamId: number): Observable<any>  {      
     let path = this.API_PATH + 'students/' + stud_id + '/courses/' + course + '/teams/' + teamId +'/studentsrequests';
-    return this.http.get<any>(path);
+    return this.http.get<Student[]>(path);
   }
 
 
@@ -191,6 +192,7 @@ export class StudentService {
     //sottomette un elaborato scritto dallo studente
     const data: FormData = new FormData();
     data.append('imageFile', imageFile);
+    console.log(data);
     let path = this.API_PATH + 'courses/'+ course + '/tasks/' + taskId + '/essays/' + essayId;
     return this.http.put(path, data, { reportProgress: true, responseType: 'text'});
   }
@@ -202,3 +204,7 @@ export class StudentService {
   } */
 
 }
+
+
+
+

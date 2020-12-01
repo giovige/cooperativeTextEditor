@@ -3,8 +3,8 @@ import {Student} from 'src/app/student.model'
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel, DataSource} from '@angular/cdk/collections';
 import {FormControl, Form} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {catchError, map, startWith} from 'rxjs/operators';
+import {from, Observable} from 'rxjs';
+import {catchError, concatMap, map, startWith} from 'rxjs/operators';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete'; 
 import {MatTable} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -34,7 +34,7 @@ export class GroupsContComponent implements OnInit {
   studentID: string;
   group: Student[];
   currentTeam: Group;
-  team_id: string;
+  team_id: number;
   team_name: string;
   nogroup:boolean;
 
@@ -69,7 +69,7 @@ export class GroupsContComponent implements OnInit {
         res => {
           if(res!==null) {
             //false - cerco componenti gruppo
-            console.log('1--------cie un gruppoooo')
+
             console.log(res);
             this.team_id = res.id; 
             this.team_name = res.name;  
@@ -80,7 +80,7 @@ export class GroupsContComponent implements OnInit {
 
           }else{
             //true - cerco persone libere
-            console.log('2--------NO gruppoooo')
+            
             this.studentService.getNoTeamStudents(this.course_name).subscribe(
               s => {
                 this.freeStudents = s;
@@ -89,19 +89,39 @@ export class GroupsContComponent implements OnInit {
 
             this.studentService.getTeamRequests(this.studentID, this.course_name).subscribe(
               tkn => {
-                console.log(tkn);
-                this.studentService.getInvitedToAGroup(this.studentID, this.course_name, tkn.teamId).subscribe(
-                  s => {
-                    this.requestMap.set(tkn, s);
-                  }
-                );
-
+                if(Object.keys(tkn).length !== 0){
+                  console.log('trovato token');
+                  console.log(tkn);
+                  
+                  from(tkn).forEach( (t: Token) => {
+                    
+                    console.log('CICLOOOOO');
+                    
+                    this.studentService.getTeamMembers(t.teamId).subscribe(
+                      s => {
+                        console.log('ADESSO DIVENTA COSI');
+                        console.log(t);
+                        console.log(s);
+                        //this.requestMap.set(t, s);
+                        //console.log('mappa token-studenti');
+                        //console.log(this.requestMap);
+                      });
+                  });
+                  
+                }else{
+                  console.log('niente token');
+                }
+                
+                
+          
                 //qui per ogni teamId devo trovare i partecipanti e il nome
               },
               err => {
                 console.log('nessuna richiesta gruppo!');
               }
             );
+
+
           }
 
 
@@ -113,13 +133,88 @@ export class GroupsContComponent implements OnInit {
      
       
     });
-    console.log(this.inAteamObs);
+    
     
 
   }
 
 
+/* --------------------------------------------------------------------------------- 
+this.studentService.getTeamRequests(this.studentID, this.course_name).pipe(
+  concatMap( tkn => {
+    if(Object.keys(tkn).length !== 0){
+      console.log('trovato token');
+      console.log(tkn);
+      this.studentService.getTeamMembers(tkn.teamId);
+    }else{
+      console.log('niente token');
+    }
+  })//parentesi concatMap
+  )//parentesi pipe
+  .subscribe( s => {
+    console.log('dopppo');
+    console.log(s);
 
+  });
+
+
+
+
+
+
+
+
+  this.studentService.getTeamRequests(this.studentID, this.course_name).subscribe(
+    tkn => {
+      if(Object.keys(tkn).length !== 0){
+        console.log('trovato token');
+        console.log(tkn);
+        
+        this.studentService.getTeamMembers(tkn.teamId).subscribe(
+        s => {
+          this.requestMap.set(tkn, s);
+          console.log('mappa token-studenti');
+          console.log(this.requestMap);
+        });
+      }else{
+        console.log('niente token');
+      }
+      
+      
+
+      //qui per ogni teamId devo trovare i partecipanti e il nome
+    },
+    err => {
+      console.log('nessuna richiesta gruppo!');
+    }
+  );
+
+
+
+
+
+
+  this.studentService.getTeamRequests(this.studentID, this.course_name).subscribe(
+              tkn => {
+                if(Object.keys(tkn).length !== 0){
+                  console.log('trovato token');
+                  console.log(tkn);
+                  
+                  from(tkn).forEach( (t: Token) => {
+                    console.log(t.id);
+                    console.log(t.expiryDate);
+                    console.log('CICLOOOOO');
+                  });
+                  this.studentService.getTeamMembers(tkn.teamId).subscribe(
+                  s => {
+                    this.requestMap.set(tkn, s);
+                    console.log('mappa token-studenti');
+                    console.log(this.requestMap);
+                  });
+                }else{
+                  console.log('niente token');
+                }
+ --------------------------------------------------------------------------------- */
   
 
 
@@ -191,7 +286,7 @@ getTeam(id: string, c: string): void{
 } */
 
 //TODO
-getMembers(teamId:string): void {
+getMembers(teamId:number): void {
   this.studentService.getTeamMembers(teamId)
   .subscribe( s => {
     console.log('getMermbers()');
