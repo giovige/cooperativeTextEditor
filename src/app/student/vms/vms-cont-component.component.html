@@ -1,3 +1,5 @@
+<div class="container" *ngIf="inAteamObs | async ; else elseBlock">
+
 <section>
      <button mat-raised-button (click)="openDialogAdd()" class="addvm" color="warn"><mat-icon>add</mat-icon>&nbsp;New Vm</button> 
 </section>
@@ -36,3 +38,17 @@
 </mat-card> 
 
 </div>
+
+</div>
+
+<ng-template #elseBlock>
+
+  <div style="text-align: center;"> 
+    <h1>
+    <br>Benvenuto Studente!<br>
+    Questa è la pagina del corso di {{coursename}}.
+    </h1>
+    <h3>Devi prima appartenere ad un gruppo per visualizzare questa tab del corso.</h3>
+    </div>
+
+</ng-template>

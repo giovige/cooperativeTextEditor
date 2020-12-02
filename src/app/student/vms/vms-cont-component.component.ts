@@ -9,6 +9,7 @@ import {EditVmDialogComponent} from './edit_vm/edit-vm-dialog.component';
 import { AuthService } from 'src/app/auth/auth.service';
 import { StudentService } from 'src/app/service/student.service';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-vms-cont-component',
@@ -16,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./vms-cont-component.component.css']
 })
 export class VmsContComponentComponent implements OnInit {
-
+  inAteamObs: Observable<any>;
   studentID: string;
   coursename: string;
   teamId: number;
@@ -34,6 +35,8 @@ export class VmsContComponentComponent implements OnInit {
      this.studentID = this.authService.getStudentId();
       this.activatedRoute.params.subscribe( p => {
       this.coursename = p['course_name'];
+
+      this.inAteamObs = this.studentService.studentHasTeam(this.studentID, this.coursename);
 
       this.studentService.getStudentTeamByCourse(this.studentID, p['course_name']).subscribe( t =>  {
          this.teamId = t.id;

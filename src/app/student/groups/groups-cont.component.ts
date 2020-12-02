@@ -2,7 +2,7 @@ import { Component, ViewChild, EventEmitter ,ElementRef, OnInit, Output, Input, 
 import {Student} from 'src/app/student.model'
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel, DataSource} from '@angular/cdk/collections';
-import {FormControl, Form} from '@angular/forms';
+import {FormControl, Form, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {from, Observable} from 'rxjs';
 import {catchError, concatMap, map, startWith} from 'rxjs/operators';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete'; 
@@ -38,19 +38,23 @@ export class GroupsContComponent implements OnInit {
   team_name: string;
   nogroup:boolean;
 
-  requestMap: Map<Token, Student[]>;
+  requestMap: Map<Token, Student[]> = new Map<Token, Student[]>();
   
 
-
   @ViewChild('table') table: MatTable<Element>;
+  form: FormGroup;
+  newGroupName = new FormControl('', [Validators.required]);
+  timeoutRequest = new FormControl('', [Validators.required]);
+
 
   @Input()
   actualUser: Student = { id: '', serial:'', name: '', firstName: '', courseId: '', groupId:''};
 
   
-  constructor(private studentService: StudentService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private studentService: StudentService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
     this.currentTeam = null;
     this.nogroup=false;
+    this.inizializza_form();
    }
 
 
@@ -70,7 +74,7 @@ export class GroupsContComponent implements OnInit {
           if(res!==null) {
             //false - cerco componenti gruppo
 
-            console.log(res);
+            // console.log(res);
             this.team_id = res.id; 
             this.team_name = res.name;  
             this.studentService.getTeamMembers(this.team_id).subscribe(
@@ -90,21 +94,21 @@ export class GroupsContComponent implements OnInit {
             this.studentService.getTeamRequests(this.studentID, this.course_name).subscribe(
               tkn => {
                 if(Object.keys(tkn).length !== 0){
-                  console.log('trovato token');
-                  console.log(tkn);
+                  // console.log('trovato token');
+                  // console.log(tkn);
                   
                   from(tkn).forEach( (t: Token) => {
                     
-                    console.log('CICLOOOOO');
+                    // console.log('FOR EACH');
                     
                     this.studentService.getTeamMembers(t.teamId).subscribe(
                       s => {
-                        console.log('ADESSO DIVENTA COSI');
-                        console.log(t);
-                        console.log(s);
-                        //this.requestMap.set(t, s);
+                        // console.log('ADESSO COSI');
+                        // console.log(t);
+                        // console.log(s);
+                        this.requestMap.set(t, s);
                         //console.log('mappa token-studenti');
-                        //console.log(this.requestMap);
+                        console.log(this.requestMap);
                       });
                   });
                   
@@ -244,11 +248,20 @@ studentColumns: string[] = ['select','id', 'serial', 'name', 'firstName' ];
 
 
 
-sendRequest() {     //@@@@@@invia richiesta  
-  console.log();
-  console.log();
-  console.log();
-  console.log(this.selection);
+sendTeamRequest() {     //@@@@@@invia richiesta
+  const val = this.form.value;
+  if(!this.form.invalid) {
+    let membersList: string[] = [];
+    membersList.push(this.studentID);
+    this.selection.selected.forEach(item => membersList.push(item.id));
+    console.log(val.newGroupName);
+    console.log(val.timeoutRequest);
+    console.log(membersList);
+    this.studentService.proposeTeamRequest(this.course_name, membersList, val.newGroupName).subscribe(res => console.log(res), err => console.log(err))
+  }
+  this.selection = new SelectionModel<Student>(true, []);
+  
+  
 
 }
 
@@ -314,10 +327,17 @@ teamExist(id: string, c: string): void{
  */
 
 
+toArray(answers: object) {
+  return Object.keys(answers).map(key => answers[key]);
+}
 
 
-
-
+inizializza_form(){
+  this.form = this.fb.group({
+    newGroupName: ['', Validators.required],
+    timeoutRequest: ['', Validators.required]
+  });
+}
 
 
 

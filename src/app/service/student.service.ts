@@ -100,11 +100,30 @@ export class StudentService {
     return this.http.get<Student[]>(this.API_PATH + 'courses/' + course +'/availableStudents');
   }
 
-  addTeamRequest() {      //manda richiesta per un nuovo gruppo
-    //console.log('------------->addTeamRequest');
-
+  proposeTeamRequest(course: string, members: string[], teamName: string): Observable<any> {      //manda richiesta per un nuovo gruppo
+    //PostMapping("/{name}/proposeTeam")
+    const data: FormData = new FormData();
+    data.append('team', teamName );
+    data.append('membersIds', new Blob( members, {type: 'text'}), "blob");
+    console.log(data);
+    let path = this.API_PATH + 'courses/' + course +'/proposeTeam';
+    return this.http.post(path, data, {
+      reportProgress: true,
+      responseType: 'text'
+      });
   }
+/* 
+updateAdd_csv(course: string, csv_file: File): Observable<any> {
 
+
+  const data: FormData = new FormData();
+  data.append('file', new Blob([csv_file], {type: 'text/csv'}), csv_file.name);
+
+  return this.http.post(`${this.API_PATH}courses/${course}/enrollMany`, data, {
+    reportProgress: true,
+    responseType: 'text'
+    });
+  } */
 
   getTeamRequests(stud_id: string, course: string): Observable<any>  {    //richieste di uno studente per aderire a gruppi (requests = tokenDTO)
     return this.http.get<Token[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/requests');
@@ -159,7 +178,7 @@ export class StudentService {
   //----------------------------------------------tab_TASKS------------------------------------------------------------------
 
   getTasksForCourse(course: string): Observable<any> {     //ottiene consegne di un docente
-    console.log('------------->getTasksForCourse');
+    //console.log('------------->getTasksForCourse');
     let path = this.API_PATH + 'courses/'+ course + '/tasks';
     return this.http.get<any>(path);
   }
@@ -197,11 +216,6 @@ export class StudentService {
     return this.http.put(path, data, { reportProgress: true, responseType: 'text'});
   }
   
-  /* setImageEssay(course: string, taskId:number, essayId: number, imageFile: File) {
-    const data: FormData = new FormData();
-    data.append('imageFile', imageFile);
-    
-  } */
 
 }
 
