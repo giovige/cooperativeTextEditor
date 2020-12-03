@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Student } from '../student.model';
 import { Observable, of, forkJoin } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { concatAll, mergeMap } from 'rxjs/operators';
 import { AppComponent } from '../app.component';
 import { Group } from '../group.model';
@@ -100,31 +100,6 @@ export class StudentService {
     return this.http.get<Student[]>(this.API_PATH + 'courses/' + course +'/availableStudents');
   }
 
-  proposeTeamRequest(course: string, members: string[], teamName: string): Observable<any> {      //manda richiesta per un nuovo gruppo
-    //PostMapping("/{name}/proposeTeam")
-    const data: FormData = new FormData();
-    data.append('team', teamName );
-    data.append('membersIds', new Blob( members, {type: 'text'}), "blob");
-    console.log(data);
-    let path = this.API_PATH + 'courses/' + course +'/proposeTeam';
-    return this.http.post(path, data, {
-      reportProgress: true,
-      responseType: 'text'
-      });
-  }
-/* 
-updateAdd_csv(course: string, csv_file: File): Observable<any> {
-
-
-  const data: FormData = new FormData();
-  data.append('file', new Blob([csv_file], {type: 'text/csv'}), csv_file.name);
-
-  return this.http.post(`${this.API_PATH}courses/${course}/enrollMany`, data, {
-    reportProgress: true,
-    responseType: 'text'
-    });
-  } */
-
   getTeamRequests(stud_id: string, course: string): Observable<any>  {    //richieste di uno studente per aderire a gruppi (requests = tokenDTO)
     return this.http.get<Token[]>(this.API_PATH + 'students/' + stud_id + '/courses/' + course +'/requests');
   }
@@ -134,6 +109,29 @@ updateAdd_csv(course: string, csv_file: File): Observable<any> {
     return this.http.get<Student[]>(path);
   }
 
+
+  proposeTeamRequest(course: string, members: any, teamName: string): Observable<any> {      //manda richiesta per un nuovo gruppo
+    const data: FormData = new FormData();
+    data.append('team', teamName );
+    data.append('membersIds', members );
+    let path = this.API_PATH + 'courses/' + course +'/proposeTeam';
+    return this.http.post(path, data, {
+      reportProgress: true,
+      responseType: 'text'
+      });
+  }
+
+
+  acceptRequest(tokenString: string): Observable<any> {
+    let path = this.API_PATH + 'notification/' + 'confirm/' + tokenString;
+    return this.http.get<any>(path);
+  }
+
+
+  rejectRequest(tokenString: string): Observable<any> {
+    let path = this.API_PATH + 'notification/' + 'reject/' + tokenString;
+    return this.http.get<any>(path);
+  }
 
   //----------------------------------------------tab_VM------------------------------------------------------------------
 

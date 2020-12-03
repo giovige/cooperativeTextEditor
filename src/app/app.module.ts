@@ -34,6 +34,7 @@ import { AddVmDialogComponent } from './student/vms/add_vm/add-vm-dialog.compone
 import { TaskContComponent } from './student/tasks/task-cont.component';
 import { HomeComponent } from './home/home.component';
 import { EditVmDialogComponent } from './student/vms/edit_vm/edit-vm-dialog.component';
+import { ShowVmDialogComponent } from './student/vms/show_vm/show-vm-dialog.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { EditVmDialogComponent } from './student/vms/edit_vm/edit-vm-dialog.comp
     AddVmDialogComponent,
     TaskContComponent,
     HomeComponent,
-    EditVmDialogComponent
+    EditVmDialogComponent,
+    ShowVmDialogComponent
   ],
   imports: [
     BrowserModule,

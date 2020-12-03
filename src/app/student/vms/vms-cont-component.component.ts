@@ -6,10 +6,12 @@ import { Vm } from '../../vm.model';
 import {MatDialogModule,MatDialog} from '@angular/material/dialog'; 
 import {AddVmDialogComponent} from './add_vm/add-vm-dialog.component';
 import {EditVmDialogComponent} from './edit_vm/edit-vm-dialog.component';
+
 import { AuthService } from 'src/app/auth/auth.service';
 import { StudentService } from 'src/app/service/student.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ShowVmDialogComponent } from './show_vm/show-vm-dialog.component';
 
 @Component({
   selector: 'app-vms-cont-component',
@@ -114,8 +116,14 @@ export class VmsContComponentComponent implements OnInit {
     }
    
 
-    connect(vmId: number): void {
-      alert('connessionee');
+    connect(img: any): void {
+      console.log('connessionee');
+      const dialogRef = this.dialog.open(ShowVmDialogComponent, {
+        width: '300px',
+        height: '300px',
+        data: { img: img }
+    });
+      dialogRef.afterClosed();
     }
 
 }

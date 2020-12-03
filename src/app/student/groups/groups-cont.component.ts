@@ -261,9 +261,19 @@ sendTeamRequest() {     //@@@@@@invia richiesta
   }
   this.selection = new SelectionModel<Student>(true, []);
   
-  
-
 }
+
+
+accept(tok :string) {
+  console.log(tok);
+  this.studentService.acceptRequest(tok).subscribe();
+}
+
+reject(tok :string) {
+  console.log(tok);
+  this.studentService.rejectRequest(tok).subscribe();
+}
+
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

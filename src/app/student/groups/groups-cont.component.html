@@ -203,8 +203,8 @@
             
             <mat-panel-description>   
               <div class="example-button-row" style="margin: 1%;">
-                <button mat-raised-button class="success"  >Accetta</button>
-                <button mat-raised-button class="reject" >Rifiuta</button>      
+                <button mat-raised-button class="success" (click)="accept(tok.key.id)" >Accetta</button>
+                <button mat-raised-button class="reject" (click)="reject(tok.key.id)">Rifiuta</button>      
               </div>
             </mat-panel-description>
           </mat-expansion-panel-header>

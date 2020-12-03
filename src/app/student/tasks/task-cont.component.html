@@ -6,7 +6,7 @@
       <div class="division">
         <mat-card (click)="clickedTask(cont.id)" class="example-card" *ngFor="let cont of tasks">
             <mat-card-title>
-            Task: {{cont.id}}
+            Task: {{cont.id}}  
             </mat-card-title>
             <mat-divider></mat-divider>
             <br>
@@ -16,6 +16,8 @@
             <span>&#10230;</span> Data rilascio: {{cont.dataRilascio}}
             <br>
             <span>&#10230;</span> Data scadenza: {{cont.dataScadenza}}
+            <br>
+            <span>&#10230;</span> <a [href]="cont.description" download="consegna.png">Download</a>
           </mat-card-subtitle>
           <mat-card-content>
           </mat-card-content>
@@ -90,6 +92,7 @@
           <div mat-line>Nome: {{img.filename}} </div>
           <div mat-line>Creato da: {{img.idCreator}}</div>
           <div mat-line>Data: {{img.creationDate}}</div>
+          <div mat-line><a [href]="img.data" download="{{img.filename}}.png">Download</a></div>
         </mat-list-item>
       </mat-list>
 
