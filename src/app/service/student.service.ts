@@ -110,9 +110,10 @@ export class StudentService {
   }
 
 
-  proposeTeamRequest(course: string, members: any, teamName: string): Observable<any> {      //manda richiesta per un nuovo gruppo
+  proposeTeamRequest(course: string, members: any, teamName: string, to: any): Observable<any> {      //manda richiesta per un nuovo gruppo
     const data: FormData = new FormData();
     data.append('team', teamName );
+    data.append('timeout', to );
     data.append('membersIds', members );
     let path = this.API_PATH + 'courses/' + course +'/proposeTeam';
     return this.http.post(path, data, {

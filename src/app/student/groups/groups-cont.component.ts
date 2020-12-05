@@ -257,7 +257,7 @@ sendTeamRequest() {     //@@@@@@invia richiesta
     console.log(val.newGroupName);
     console.log(val.timeoutRequest);
     console.log(membersList);
-    this.studentService.proposeTeamRequest(this.course_name, membersList, val.newGroupName).subscribe(res => console.log(res), err => console.log(err))
+    this.studentService.proposeTeamRequest(this.course_name, membersList, val.newGroupName, val.timeoutRequest).subscribe(res => console.log(res), err => console.log(err))
   }
   this.selection = new SelectionModel<Student>(true, []);
   

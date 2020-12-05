@@ -12,6 +12,7 @@ import { StudentService } from 'src/app/service/student.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ShowVmDialogComponent } from './show_vm/show-vm-dialog.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-vms-cont-component',
@@ -25,7 +26,7 @@ export class VmsContComponentComponent implements OnInit {
   teamId: number;
   dataSource: Vm[] = [];
 
-  constructor(public dialog: MatDialog, private activatedRoute: ActivatedRoute, private studentService: StudentService, private authService: AuthService) {
+  constructor(public dialog: MatDialog, private activatedRoute: ActivatedRoute, private studentService: StudentService, private authService: AuthService,private sanitizer: DomSanitizer) {
       this.dataSource= [];
             
       //console.log('constructor  ');
@@ -93,7 +94,13 @@ export class VmsContComponentComponent implements OnInit {
 
     getTeamVms(stud_id: string, teamId: number): void {
     //GetMapping("/{id}/teams/{teamId}/vms")                getVm from team
+    let vms: Vm[] = [];
       this.studentService.getStudentVMsByCourse(stud_id,teamId).subscribe( v => {
+        vms=v;
+        vms.forEach( vm => {
+          let objectURL = 'data:image/png;base64,' + vm.screenVm;
+          vm.screenVm = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        });
         this.dataSource = v;
       });
 
