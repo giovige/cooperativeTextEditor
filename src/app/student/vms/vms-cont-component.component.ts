@@ -94,14 +94,12 @@ export class VmsContComponentComponent implements OnInit {
 
     getTeamVms(stud_id: string, teamId: number): void {
     //GetMapping("/{id}/teams/{teamId}/vms")                getVm from team
-    let vms: Vm[] = [];
-      this.studentService.getStudentVMsByCourse(stud_id,teamId).subscribe( v => {
-        vms=v;
+      this.studentService.getStudentVMsByCourse(stud_id,teamId).subscribe( vms => {
         vms.forEach( vm => {
           let objectURL = 'data:image/png;base64,' + vm.screenVm;
           vm.screenVm = this.sanitizer.bypassSecurityTrustUrl(objectURL);
         });
-        this.dataSource = v;
+        this.dataSource = vms;
       });
 
     }
