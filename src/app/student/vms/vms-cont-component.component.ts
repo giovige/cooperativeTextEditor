@@ -122,7 +122,6 @@ export class VmsContComponentComponent implements OnInit {
    
 
     connect(img: any): void {
-      console.log('connessionee');
       const dialogRef = this.dialog.open(ShowVmDialogComponent, {
         width: '300px',
         height: '300px',

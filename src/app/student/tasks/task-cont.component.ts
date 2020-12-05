@@ -2,6 +2,7 @@ import { DataSource } from '@angular/cdk/table';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { endWith } from 'rxjs/operators';
@@ -39,7 +40,7 @@ export class TaskContComponent implements OnInit {
  
 
 
-  constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private authService: AuthService) {
+  constructor(private activatedRoute: ActivatedRoute, private studentService: StudentService, private authService: AuthService, private sanitizer: DomSanitizer) {
     this.taskId=0;
     this.hasStorical=false;
    }
@@ -58,6 +59,10 @@ export class TaskContComponent implements OnInit {
 loadTasks():void {
   this.studentService.getTasksForCourse(this.coursename).subscribe(v => {
     this.tasks = v;
+    this.tasks.forEach( tsk => {
+      let objectURL = 'data:image/png;base64,' + tsk.description;
+      tsk.description = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    });
   });
 }
 
@@ -108,6 +113,10 @@ clickedTask(id: number):void {
     this.studentService.getEssayStorical(this.coursename, this.studId,this.taskId,this.essayId) .subscribe(
       img => {
         this.essayImages = img;
+        this.essayImages.forEach(img => {
+          let objectURL = 'data:image/png;base64,' + img.data;
+          img.data = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        });
         console.log(this.essayImages);
       }
     );
